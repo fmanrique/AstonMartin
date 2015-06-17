@@ -1,0 +1,207 @@
+/* ========================================================
+*
+* Melon - Flat & Responsive Admin Template
+*
+* ========================================================
+*
+* File: public.css
+* Description: public template styling
+* Version: 1.0
+*
+* ======================================================== */
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.public {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background-color:  #FFFFFF
+  /* Helper */
+
+}
+.public .content .center-content {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.share {
+  margin: 20px 40px 20px 40px;
+  max-width: 50px;
+}
+.share-xs {
+  margin: 10px;
+  max-width: 30px;
+}
+
+
+.public .logo,
+.public .single-sign-on,
+.public .footer {
+  margin: 0 auto;
+  text-align: center;
+}
+.public .logo {
+  padding: 10px;
+  font-size: 23px;
+}
+.public .box {
+  background-color: #fff;
+  width: 350px;
+  margin: 0 auto;
+  border: 1px solid #d9d9d9;
+  border-top: 5px solid #004F32;
+  /* * * * * * * * * * * *
+		 * Inner Box
+		 * * * * * * * * * * * */
+
+}
+.public .box .content {
+  padding: 30px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+.public .box form {
+  padding: 0;
+  margin: 0;
+}
+.public .box .form-title {
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 25px;
+}
+.public .box .form-group {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 5px;
+}
+.public .box .form-actions {
+  background-color: transparent;
+  border-top: none;
+  padding: 10px 0;
+  margin: 0;
+}
+.form-actions {
+  background-color: transparent;
+  margin: 0;
+  padding: 10px;
+  border: none;
+}
+.public .box .input-icon {
+  position: relative;
+}
+.public .box .input-icon input {
+  border-left: 2px solid #004F32;
+}
+.public .box .has-error .input-icon input {
+  border-left-color: #b94a48;
+}
+.public .box .has-success .input-icon input {
+  border-left-color: #468847;
+}
+.public .box .checkbox {
+  margin-top: 7px;
+}
+.public .box .inner-box {
+  background-color: #f9f9f9;
+  border-top: 1px solid #c0c0c0;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+.public .box .inner-box .content {
+  padding: 12px 30px;
+  text-align: center;
+}
+.public .box .inner-box a {
+  color: #555555;
+  font-size: 12px;
+  font-weight: 600;
+}
+.public .box .inner-box a:hover {
+  text-decoration: none;
+  color: #004F32;
+}
+.public .box .inner-box .close {
+  font-size: 12px;
+  margin-top: -3px;
+  margin-right: -20px;
+}
+.public .box .inner-box .close.hide-default {
+  display: none;
+}
+.public .box .inner-box form {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.public .box .inner-box a + form {
+  margin-top: 20px;
+}
+.public .box .inner-box .form-group {
+  margin-bottom: 10px;
+}
+.public .box .inner-box .forgot-password-done {
+  padding: 10px 0;
+}
+.public .box .inner-box .forgot-password-done .success-icon,
+.public .box .inner-box .forgot-password-done .danger-icon {
+  display: block;
+  font-size: 30px;
+  padding: 15px;
+  padding-top: 0;
+}
+.public .box .inner-box .forgot-password-done .success-icon {
+  color: #94b86e;
+}
+.public .box .inner-box .forgot-password-done .danger-icon {
+  color: #e25856;
+}
+.public .box .inner-box .forgot-password-done span {
+  font-weight: 600;
+}
+.public .single-sign-on {
+  width: 350px;
+  padding: 15px 0;
+  opacity: 0.5;
+  -webkit-transition: opacity 200ms ease-out;
+  -moz-transition: opacity 200ms ease-out;
+  -o-transition: opacity 200ms ease-out;
+  transition: opacity 200ms ease-out;
+}
+.public .single-sign-on:hover {
+  opacity: 1;
+}
+.public .single-sign-on span {
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: block;
+  color: #888888;
+}
+.public .single-sign-on .btn i {
+  padding-right: 5px;
+}
+.public .footer {
+  width: 350px;
+  padding-top: 30px;
+}
+.public .footer a {
+  font-size: 13px;
+  color: #6f6f6f;
+}
+.public .footer a:hover {
+  text-decoration: none;
+  color: #004F32;
+}
+.public .spacing-top {
+  padding-top: 7px !important;
+}

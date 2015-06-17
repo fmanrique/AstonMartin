@@ -1,0 +1,11 @@
+CACHE MANIFEST
+
+CACHE:
+*.ttf
+*.css
+*.png
+*.js
+
+NETWORK:
+http://fonts.googleapis.com
+

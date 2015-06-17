@@ -1,0 +1,17 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="754" measuredH="337" mockupW="689" mockupH="309">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Title" x="65" y="28" w="-1" h="-1" measuredW="352" measuredH="43" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Project%20description%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::TextArea" x="65" y="104" w="689" h="233" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+        <size>20</size>
+        <state>up</state>
+        <text>Web%20app%20development%2C%20using%20PHP%205.4%20and%20MySQL%205.x%20hosted%20on%20an%20Apache%202.x%20server.%0A%20%0ADetails%3A%0AFramework%20PHP%20Codeigniter%20for%20backend%0AHTML5%0ACSS3%0AJavascript%20and%20jQuery</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
