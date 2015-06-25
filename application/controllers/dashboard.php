@@ -33,19 +33,30 @@ class dashboard extends CI_Controller {
 		$vars['title'] = 'Dashboard';
 		$vars['content_view'] = '/targeted_sales';
 		$vars['option']  = "dashboard";
-		$vars['dealerships'] = $this->dealerships_model->get_all();
 		$vars['user_type_id'] = $user['user_type_id'];
 
-		if ($user['dealership_id'] == 0) {
-			$sales = $this->sales_model->get_by_period($user['period']);
-		} else {
-			$sales = $this->sales_model->get_by_dealership_period($user['dealership_id'], $user['period']);
-		}
 		
+		$sales = array();
 		$q = 1;
 		$data = array();
 		$quarters = array();
 		$targeted = 0;
+		$sumamry['targeted'] = 0;
+		$sumamry['gross'] = 0;
+		$sumamry['marketing'] = 0;
+
+		if ($user['dealership_id'] == 0) {
+			$sales = $this->sales_model->get_by_period($user['period']);
+			$dealerships = $this->dealerships_model->get_all();
+			$sumamry['spend'] = $this->activities_model->get_sales_by_date($user["period"]);
+			$vars['dealership_revenue'] = 1;
+		} else {
+			$sales = $this->sales_model->get_by_dealership_period($user['dealership_id'], $user['period']);
+			$dealerships = $this->dealerships_model->get_by_id($user['dealership_id']);
+			$sumamry['spend'] = $this->activities_model->get_sales_by_dealer_date($user["dealership_id"], $user["period"]);
+			$vars['dealership_revenue'] = $dealerships[0]['revenue'];
+		}
+
 
 		for ($i = 1; $i<=12; $i++) {
 			$quarter['period'] = $user['period'];
@@ -75,25 +86,19 @@ class dashboard extends CI_Controller {
 			}
 		}
 
-		$totals['targeted'] = $targeted;
-		$totals['gross'] = $targeted * 200000;
-		$totals['marketing'] = ($targeted * 200000)*0.015;
-		if ($user['dealership_id'] == 0)
-			$totals['spend'] = $this->activities_model->get_sales_by_date($user["period"]);
-		else 
-			$totals['spend'] = $this->activities_model->get_sales_by_dealer_date($user["dealership_id"], $user["period"]);
+		foreach ($dealerships as $key => $dealership) {
+			$totals = $this->sales_model->get_totals_by_dealership_period($dealership['id'], $user['period']);
+
+			$sumamry['targeted'] += $totals['sales'];
+			$sumamry['gross'] += $totals['sales'] * $totals['revenue'];
+			$sumamry['marketing'] += ($totals['sales'] * $totals['revenue'])*0.015;
+
+		}
 
 		$vars['data'] = $data;
 		$vars['dealership_id'] = $user['dealership_id'];
-		$vars['totals'] = $totals;
+		$vars['totals'] = $sumamry;
 
-
-
-		
-		/*echo "<pre>";
-		print_r($totals);
-		echo "</pre>";
-		die;*/
 				
 		$this->load->view('template', $vars);
 		

@@ -6,10 +6,11 @@ class users_model extends CI_Model {
 	}
    
 	public function get_all(){
-		$this->db->select('u.id, u.email, u.name, t.type, u.dealership_id, d.name as "dealership_name"');
+		$this->db->select('u.id, u.email, u.name, t.type, u.dealership_id, d.name as "dealership_name", r.description as "region_name"');
 		$this->db->from('users u');
 		$this->db->join('user_types t', 't.id = u.user_type_id', 'inner');
 		$this->db->join('dealerships d', 'd.id = u.dealership_id', 'inner');
+		$this->db->join('regions r', 'r.id = d.region_id', 'inner');
 		$this->db->where('u.status_id', 1);
 
 		$query = $this->db->get();
@@ -17,10 +18,11 @@ class users_model extends CI_Model {
 	}
 	
 	public function get_by_id($id){
-		$this->db->select('u.id, u.email, u.name, u.user_type_id, t.type, u.dealership_id, d.name as "dealership_name"');
+		$this->db->select('u.id, u.email, u.name, u.user_type_id, t.type, u.dealership_id, d.name as "dealership_name", z.description as "region_name"');
 		$this->db->from('users u');
 		$this->db->join('user_types t', 't.id = u.user_type_id', 'inner');
 		$this->db->join('dealerships d', 'd.id = u.dealership_id', 'inner');
+		$this->db->join('regions z', 'z.id = d.region_id', 'inner');
 		$this->db->where('u.id', $id);
 		$this->db->where('u.status_id', 1);
 		$this->db->limit(1);

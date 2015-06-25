@@ -101,19 +101,123 @@ class reports extends CI_Controller {
 			}
 		}
 
-		$activities = $this->reports_model->get_report_activities($start_date, $end_date, $category_id, rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id);
+		$currencies = $this->reports_model->get_report_currencies($start_date, $end_date, $category_id, rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id);
 
 		$this->load->library('excel');
 		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->setActiveSheetIndex(0);
+
+		$objPHPExcel->removeSheetByIndex(0);
+
+
+		foreach($currencies as $key => $currency) {
+			$activities = $this->reports_model->get_report_activities($start_date, $end_date, $category_id, rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id, $currency['currency_id']);
+			$objWorkSheet = $objPHPExcel->createSheet($key);
+
+
+			$objWorkSheet->setCellValue('J' . 1, "Metrics");
+			$objWorkSheet->mergeCells("J1:K1");
+			$objWorkSheet->getStyle('J1')->getAlignment()->applyFromArray(
+			    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,)
+			);
+
+			$objWorkSheet->getStyle('A1:K2')->applyFromArray(
+			    array(
+			        'fill' => array(
+			            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			            'color' => array('rgb' => '9cbbb3')
+			        )
+			    )
+			);
+			$objWorkSheet->getStyle('A1:K2')->getFont()->setBold(true);
+			$objWorkSheet->getStyle('A1:K2')->getFont()->setSize(14);
+
+
+			$objWorkSheet->setCellValue('A' . 2, "Dealership")
+										  ->setCellValue('B' . 2, "Month")
+			                              ->setCellValue('C' . 2, "Activity Type")
+			                              ->setCellValue('D' . 2, "Activity Name")
+			                              ->setCellValue('E' . 2, "Start Date")
+			                              ->setCellValue('F' . 2, "Expense")
+			                              ->setCellValue('G' . 2, "Audience")
+			                              ->setCellValue('H' . 2, "Activity Focus")
+			                              ->setCellValue('I' . 2, "Model Focus")
+			                              ->setCellValue('J' . 2, "Metric")
+			                              ->setCellValue('K' . 2, "Quantity");
+
+			$objWorkSheet->getColumnDimension('A')->setWidth(15);
+			$objWorkSheet->getColumnDimension('B')->setWidth(10);
+			$objWorkSheet->getColumnDimension('C')->setWidth(60);
+			$objWorkSheet->getColumnDimension('D')->setWidth(15);
+			$objWorkSheet->getColumnDimension('E')->setWidth(15);
+			$objWorkSheet->getColumnDimension('F')->setWidth(20);
+			$objWorkSheet->getColumnDimension('G')->setWidth(20);
+			$objWorkSheet->getColumnDimension('H')->setWidth(20);
+			$objWorkSheet->getColumnDimension('I')->setWidth(20);
+			$objWorkSheet->getColumnDimension('J')->setWidth(30);
+			$objWorkSheet->getColumnDimension('K')->setWidth(20);
+			
+			$x = 0;
+
+			for ($i = 3; $i <= count($activities)+2; $i++) {
+				$objWorkSheet->setCellValue('A' . $i, $activities[$i-3]["dealership"])
+											  ->setCellValue('B' . $i, $activities[$i-3]["month_date"])
+											  ->setCellValue('C' . $i, $activities[$i-3]["description"])
+				                              ->setCellValue('D' . $i, $activities[$i-3]["name"])
+				                              ->setCellValue('E' . $i, $activities[$i-3]["start_date"])
+				                              ->setCellValue('F' . $i, $activities[$i-3]["expense"])
+				                              ->setCellValue('G' . $i, str_replace('|', "\n", $activities[$i-3]["audiences"]))
+				                              ->setCellValue('H' . $i, str_replace('|', "\n", $activities[$i-3]["focus"]))
+				                              ->setCellValue('I' . $i, str_replace('|', "\n", $activities[$i-3]["models"]))
+				                              ->setCellValue('J' . $i, str_replace('|', "\n", $activities[$i-3]["metric"]))
+				                              ->setCellValue('K' . $i, str_replace('|', "\n", $activities[$i-3]["quantity"]));
+
+				$objWorkSheet->getStyle('G' . $i)->getAlignment()->setWrapText(true);
+				$objWorkSheet->getStyle('H' . $i)->getAlignment()->setWrapText(true);
+				$objWorkSheet->getStyle('I' . $i)->getAlignment()->setWrapText(true);
+				$objWorkSheet->getStyle('J' . $i)->getAlignment()->setWrapText(true);
+				$objWorkSheet->getStyle('K' . $i)->getAlignment()->setWrapText(true);
+
+				$objWorkSheet->getStyle('K' . $i)->getAlignment()->applyFromArray(
+				    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,)
+				);
+
+				$objWorkSheet->getStyle('F'.$i)->getNumberFormat()->setFormatCode("$ #,###,###.00");
+
+
+				if($x <> 0){
+					$objWorkSheet->getStyle('A'.$i.':K'.$i)->applyFromArray(
+					    array(
+					        'fill' => array(
+					            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+					            'color' => array('rgb' => 'd3d3d3')
+					        )
+					    )
+					);
+					$x=0;
+				}
+				else{
+					$x=1;	
+				}
+
+			}
+
+			$objWorkSheet->setCellValue('F'.($i+2),'=SUM(F3:F'.($i+1).')');
+			$objWorkSheet->setCellValue('E'.($i+2), "TOTAL:");
+			$objWorkSheet->getStyle('E'.($i+2).':F'.($i+2))->getFont()->setBold(true);
+			$objWorkSheet->getStyle('F'.($i+2))->getNumberFormat()->setFormatCode("$ #,###,###.00");
+
+			$objWorkSheet->setTitle($currency['description']);
+
+		}
+		/*$objPHPExcel->setActiveSheetIndex(0);
 
 		$objPHPExcel->getActiveSheet()->setCellValue('J' . 1, "Metrics");
-		$objPHPExcel->getActiveSheet()->mergeCells("J1:L1");
+		$objPHPExcel->getActiveSheet()->mergeCells("J1:K1");
 		$objPHPExcel->getActiveSheet()->getStyle('J1')->getAlignment()->applyFromArray(
 		    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,)
 		);
 
-		$objPHPExcel->getActiveSheet()->getStyle('A1:L2')->applyFromArray(
+		$objPHPExcel->getActiveSheet()->getStyle('A1:K2')->applyFromArray(
 		    array(
 		        'fill' => array(
 		            'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -121,60 +225,56 @@ class reports extends CI_Controller {
 		        )
 		    )
 		);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:L2')->getFont()->setBold(true);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:L2')->getFont()->setSize(14);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:K2')->getFont()->setBold(true);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:K2')->getFont()->setSize(14);
 
 
 		$objPHPExcel->getActiveSheet()->setCellValue('A' . 2, "Dealership")
 									  ->setCellValue('B' . 2, "Month")
-		                              ->setCellValue('C' . 2, "Activity Name")
-		                              ->setCellValue('D' . 2, "Title")
+		                              ->setCellValue('C' . 2, "Activity Type")
+		                              ->setCellValue('D' . 2, "Activity Name")
 		                              ->setCellValue('E' . 2, "Start Date")
 		                              ->setCellValue('F' . 2, "Expense")
 		                              ->setCellValue('G' . 2, "Audience")
 		                              ->setCellValue('H' . 2, "Activity Focus")
 		                              ->setCellValue('I' . 2, "Model Focus")
-		                              ->setCellValue('J' . 2, "Type")
-		                              ->setCellValue('K' . 2, "Metric")
-		                              ->setCellValue('L' . 2, "Quantity");
+		                              ->setCellValue('J' . 2, "Metric")
+		                              ->setCellValue('K' . 2, "Quantity");
 
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(60);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(60);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
 		
 		$x = 0;
 
 		for ($i = 3; $i <= count($activities)+2; $i++) {
 			$objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $activities[$i-3]["dealership"])
 										  ->setCellValue('B' . $i, $activities[$i-3]["month_date"])
-			                              ->setCellValue('C' . $i, $activities[$i-3]["name"])
-			                              ->setCellValue('D' . $i, $activities[$i-3]["description"])
+										  ->setCellValue('C' . $i, $activities[$i-3]["description"])
+			                              ->setCellValue('D' . $i, $activities[$i-3]["name"])
 			                              ->setCellValue('E' . $i, $activities[$i-3]["start_date"])
 			                              ->setCellValue('F' . $i, $activities[$i-3]["expense"])
 			                              ->setCellValue('G' . $i, str_replace('|', "\n", $activities[$i-3]["audiences"]))
 			                              ->setCellValue('H' . $i, str_replace('|', "\n", $activities[$i-3]["focus"]))
 			                              ->setCellValue('I' . $i, str_replace('|', "\n", $activities[$i-3]["models"]))
-			                              ->setCellValue('J' . $i, str_replace('|', "\n", $activities[$i-3]["category"]))
-			                              ->setCellValue('K' . $i, str_replace('|', "\n", $activities[$i-3]["metric"]))
-			                              ->setCellValue('L' . $i, str_replace('|', "\n", $activities[$i-3]["quantity"]));
+			                              ->setCellValue('J' . $i, str_replace('|', "\n", $activities[$i-3]["metric"]))
+			                              ->setCellValue('K' . $i, str_replace('|', "\n", $activities[$i-3]["quantity"]));
 
 			$objPHPExcel->getActiveSheet()->getStyle('G' . $i)->getAlignment()->setWrapText(true);
 			$objPHPExcel->getActiveSheet()->getStyle('H' . $i)->getAlignment()->setWrapText(true);
 			$objPHPExcel->getActiveSheet()->getStyle('I' . $i)->getAlignment()->setWrapText(true);
 			$objPHPExcel->getActiveSheet()->getStyle('J' . $i)->getAlignment()->setWrapText(true);
 			$objPHPExcel->getActiveSheet()->getStyle('K' . $i)->getAlignment()->setWrapText(true);
-			$objPHPExcel->getActiveSheet()->getStyle('L' . $i)->getAlignment()->setWrapText(true);
 
-			$objPHPExcel->getActiveSheet()->getStyle('L' . $i)->getAlignment()->applyFromArray(
+			$objPHPExcel->getActiveSheet()->getStyle('K' . $i)->getAlignment()->applyFromArray(
 			    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,)
 			);
 
@@ -182,7 +282,7 @@ class reports extends CI_Controller {
 
 
 			if($x <> 0){
-				$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':L'.$i)->applyFromArray(
+				$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':K'.$i)->applyFromArray(
 				    array(
 				        'fill' => array(
 				            'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -201,7 +301,7 @@ class reports extends CI_Controller {
 		$objPHPExcel->getActiveSheet()->setCellValue('F'.($i+2),'=SUM(F3:F'.($i+1).')');
 		$objPHPExcel->getActiveSheet()->setCellValue('E'.($i+2), "TOTAL:");
 		$objPHPExcel->getActiveSheet()->getStyle('E'.($i+2).':F'.($i+2))->getFont()->setBold(true);
-		$objPHPExcel->getActiveSheet()->getStyle('F'.($i+2))->getNumberFormat()->setFormatCode("$ #,###,###.00");
+		$objPHPExcel->getActiveSheet()->getStyle('F'.($i+2))->getNumberFormat()->setFormatCode("$ #,###,###.00");*/
 
 
 		// Redirect output to a client’s web browser (Excel5)

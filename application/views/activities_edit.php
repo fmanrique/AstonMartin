@@ -129,28 +129,7 @@
 						<input type="hidden" id="metrics" name="metrics">
 						<label class="col-md-2 control-label">Add Metrics:</label>
 						
-						<div class="col-md-4">
-							<div class="row">
-								<div class="col-md-12">
-									<span class="help-block">Type</span>
-									<select class="form-control" id="metrics_type" name="metrics_type">
-										<?php foreach($categories as $key => $category) {?>
-										<?php if (!empty($category['childs'])) : ?>
-											<optgroup label="<?php echo $category['description']; ?>">
-												<?php foreach($category['childs'] as $key2 => $subcategory) {?>
-													<option value="<?php echo $subcategory['id']; ?>"><?php echo $subcategory['description']; ?></option>
-												<?php } ?>
-											</optgroup>
-										<?php else: ?>
-											<option value="<?php echo $category['id']; ?>"><?php echo $category['description']; ?></option>
-										<?php endif ?>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-						</div>
-						
-						<div class="col-md-3">
+						<div class="col-md-5">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">Metric</span>
@@ -164,7 +143,7 @@
 						</div>
 						
 
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">Quantity</span>
@@ -173,7 +152,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-1">
+						<div class="col-md-2">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">&nbsp;</span>
@@ -190,16 +169,14 @@
 									<table class="table" id="table_activity_metrics">
 										<thead>
 											<tr>
-												<th>Type</th>
-												<th>Metric</th>
-												<th>Quantity</th>
-												<th style="min-width: 60px" class="align-center no-sort">Delete</th>
+												<th style="width: 60%">Metric</th>
+												<th style="width: 20%">Quantity</th>
+												<th style="width: 20%; in-width: 60px" class="align-center no-sort">Delete</th>
 											</tr>
 										</thead>
 										<tbody>
 											<?php foreach($activity_metrics as $key => $metric) {?>
 											<tr>
-												<td><?php echo $metric['category']; ?></td>
 												<td><?php echo $metric['metric']; ?></td>
 												<td><?php echo $metric['quantity']; ?></td>
 												<td class="align-center">
@@ -269,12 +246,12 @@ $(document).ready(function() {
 		defaultDate: +7,
 		showOtherMonths:true,
 		autoSize: true,
-		appendText: '<span class="help-block">(mm-dd-yyyy)</span>',
-		dateFormat: 'mm-dd-yy'
+		appendText: '<span class="help-block">(mm/dd/yyyy)</span>',
+		dateFormat: 'mm/dd/yy'
 	});
 
     var data_input = JSON.parse('<?php echo $activity_metrics_json; ?>');
-    var cols = ["0", "1", "2", "3"];
+    var cols = ["0", "1", "2"];
     var row_id = 0;
 
     var t = $('#table_activity_metrics').DataTable();
@@ -285,30 +262,29 @@ $(document).ready(function() {
 
     	if ($('#metrics_quantity').val() != "") quantity = $('#metrics_quantity').val();
 
-    	key = search_array([cols[0],cols[1]], [$('#metrics_type option:selected').text(), $('#metrics_metric option:selected').text()], data);
+    	key = search_array(cols[0], $('#metrics_metric option:selected').text(), data);
 
 
     	if (key >= 0) {
-    		quantity = parseInt(data[key][cols[2]]) + parseInt(quantity);
-    		t.fnUpdate(quantity, key, cols[2]);
+    		quantity = parseInt(data[key][cols[1]]) + parseInt(quantity);
+    		t.fnUpdate(quantity, key, cols[1]);
     		
     		update_row_id = data_input[key][cols[0]];
-    		data_input[key] = [update_row_id, $('#metrics_type option:selected').val(), $('#metrics_metric option:selected').val(), quantity];
+    		data_input[key] = [update_row_id, $('#metrics_metric option:selected').val(), quantity];
 
     	} else {
     		t.fnAddData( [
-	            $('#metrics_type option:selected').text(),
 	            $('#metrics_metric option:selected').text(),
 	            quantity,
 	            "<span class=\"btn-group\"><a title=\"Delete\" data-row=\"" + row_id + "\" class=\"delete-activity\"><i class=\"icon-remove\"></i></a></span>"
 	        ]);
 
-    		data_input.push([row_id, $('#metrics_type option:selected').val(), $('#metrics_metric option:selected').val(), quantity]);
+    		data_input.push([row_id, $('#metrics_metric option:selected').val(), quantity]);
 
     		row_id = row_id+1;
 
     	}
-		$('#table_activity_metrics tr td:nth-child(4)').addClass('align-center');
+		$('#table_activity_metrics tr td:nth-child(3)').addClass('align-center');
         
 
     } );
@@ -320,8 +296,18 @@ $(document).ready(function() {
     	t.fnDeleteRow(key);
     	data_input.splice(key, 1);
 	});
+
+	function search_array(key, value, data) {
+    	for (i = 0; i<data.length; i++) {
+    		if (data[i][key] == value) {
+    			return i;
+    		}
+    	}
+
+    	return -1;
+    }
     
-    function search_array(key, value, data) {
+    function search_multi_array(key, value, data) {
     	found = true;
     	for (i = 0; i<data.length; i++) {
     		for (k = 0; k < key.length; k++) {

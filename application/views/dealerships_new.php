@@ -21,11 +21,29 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">Zone</label>
+						<label class="col-md-2 control-label">Per unit new car sales revenue <span class="required">*</span></label>
 						<div class="col-md-10">
-							<select class="form-control" id="zone_id" name="zone_id">
-								<?php foreach($zones as $key => $zone) {?>
-								<option value="<?php echo $zone['id']; ?>"><?php echo $zone['description']; ?></option>
+							<input type="text" name="revenue" class="form-control required" placeholder="$ 0.00" value="<?php echo $data['revenue']; ?>">
+						</div>			
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label">Currency <span class="required">*</span></label>
+						<div class="col-md-10">
+							<select class="form-control" id="currency_id" name="currency_id">
+								<?php foreach($currencies as $key => $currency) {?>
+								<option value="<?php echo $currency['id']; ?>"><?php echo $currency['description']; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label">Region</label>
+						<div class="col-md-10">
+							<select class="form-control" id="region_id" name="region_id">
+								<?php foreach($regions as $key => $region) {?>
+								<option value="<?php echo $region['id']; ?>"><?php echo $region['description']; ?></option>
 								<?php } ?>
 							</select>
 						</div>

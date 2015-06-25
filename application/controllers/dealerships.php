@@ -22,7 +22,8 @@ class  dealerships extends CI_Controller {
 		parent::__construct();
 		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
 		$this->load->model('dealerships_model');
-		$this->load->model('zones_model');
+		$this->load->model('regions_model');
+		$this->load->model('currencies_model');
 	}
 
 	public function index() {
@@ -39,7 +40,8 @@ class  dealerships extends CI_Controller {
 		$vars['title'] = 'dealerships';
 		$vars['content_view'] = '/dealerships_new';
 		$vars['option']  = "dealerships";
-		$vars['zones'] = $this->zones_model->get_all();
+		$vars['regions'] = $this->regions_model->get_all();
+		$vars['currencies'] = $this->currencies_model->get_all();
 
 		$this->load->view('template', $vars);
 	}
@@ -49,7 +51,8 @@ class  dealerships extends CI_Controller {
 		$vars['content_view'] = '/dealerships_edit';
 		$vars['option']  = "dealerships";
 		$vars['data'] = $this->dealerships_model->get_by_id($id);
-		$vars['zones'] = $this->zones_model->get_all();
+		$vars['regions'] = $this->regions_model->get_all();
+		$vars['currencies'] = $this->currencies_model->get_all();
 			
 		if (count($vars['data']) > 0) {
 			$vars['data'] = $vars['data'][0];
@@ -65,7 +68,7 @@ class  dealerships extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 		
-		$this->dealerships_model->insert($this->input->post('name'),$this->input->post('description'),$this->input->post('zone_id'), $user['id'], $date);
+		$this->dealerships_model->insert($this->input->post('name'),$this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
 
 		redirect(base_url() . 'dealerships', 'location', 301);
 	}
@@ -74,7 +77,7 @@ class  dealerships extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 		
-		$this->dealerships_model->update($id, $this->input->post('name'), $this->input->post('description'),$this->input->post('zone_id'), $user['id'], $date);
+		$this->dealerships_model->update($id, $this->input->post('name'), $this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
 
 		redirect(base_url() . 'dealerships', 'location', 301);
 	}

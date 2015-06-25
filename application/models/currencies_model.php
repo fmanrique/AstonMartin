@@ -1,5 +1,5 @@
 <?php
-class zones_model extends CI_Model {
+class currencies_model extends CI_Model {
 
 	function __construct(){
 		$this->load->database();
@@ -7,19 +7,20 @@ class zones_model extends CI_Model {
    
 	public function get_all(){
 		//Get only actives
-		$query = $this->db->get_where('zones', array('status_id' => 1));
+		$query = $this->db->get_where('currencies', array('status_id' => 1));
 		return $query->result_array();
 	}
 
 	public function get_by_id($id){
 		//Get only actives
-		$query = $this->db->get_where('zones', array('id' => $id, 'status_id' => 1));
+		$query = $this->db->get_where('currencies', array('id' => $id, 'status_id' => 1));
 		return $query->result_array();
 		
 	}
 
-	public function insert($description, $user_id, $date){
+	public function insert($name, $description, $user_id, $date){
 		$data = array(
+			'name' => $name,
 			'description' => $description,
 			'status_id' => 1,
 			'date_create' => $date,
@@ -28,20 +29,21 @@ class zones_model extends CI_Model {
 			'user_change_id' => $user_id
 		);
 
-		$this->db->insert('zones', $data);
+		$this->db->insert('currencies', $data);
 
 		return $this->db->insert_id();
 	}
 
-	public function update($id, $description, $user_id, $date){
+	public function update($id, $name, $description, $user_id, $date){
 		$data = array(
+			'name' => $name,
 			'description' => $description,
 			'date_change' => $date,
 			'user_change_id' => $user_id
 		);
 
 		$this->db->where('id', $id);
-		$this->db->update('zones', $data);
+		$this->db->update('currencies', $data);
 	}
 
     public function delete($id, $user_id, $date){
@@ -53,7 +55,7 @@ class zones_model extends CI_Model {
 		);
 
 		$this->db->where('id', $id);
-		$this->db->update('zones', $data);
+		$this->db->update('currencies', $data);
 	}
 
 	

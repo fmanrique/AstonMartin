@@ -15,7 +15,8 @@
 					<thead>
 						<tr>
 							<th class="no-sort">Name</th>
-							<th class="no-sort">Zone</th>
+							<th class="no-sort">Region</th>
+							<th class="no-sort">Currency</th>
 							<th class="align-center no-sort">Edit</th>
 							<th class="align-center no-sort">Delete</th>
 						</tr>
@@ -24,7 +25,8 @@
 					<?php foreach($data as $key => $dealership) {?>
 						</tr>
 							<td><?php echo $dealership['name']; ?></td>
-							<td><?php echo $dealership['zone_description']; ?></td>
+							<td><?php echo $dealership['region_description']; ?></td>
+							<td><?php echo $dealership['currency_name']; ?></td>
 							<td class="align-center">
 								<span class="btn-group">
 									<a href="<?php echo base_url() . "dealerships/edit/" . $dealership['id']; ?>" title="Edit" class="bs-tooltip"><i class="icon-pencil"></i></a>
@@ -32,7 +34,7 @@
 							</td>
 							<td class="align-center">
 								<span class="btn-group">
-									<a href="<?php echo base_url() . "dealerships/delete/" . $dealership['id']; ?>" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
+									<a href="javascript:void()" onclick="javascript:delete_item('<?php echo base_url() . "dealerships/delete/" . $dealership['id']; ?>')" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
 								</span>
 							</td>
 						</tr>

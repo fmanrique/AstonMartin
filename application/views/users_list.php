@@ -16,6 +16,7 @@
 							<th class="hidden-xs">Name</th>
 							<th>Email</th>
 							<th>Dealership</th>
+							<th class="hidden-xs">Region</th>
 							<th class="hidden-xs">Security Level</th>
 							<th class="align-center no-sort">Edit</th>
 							<th class="align-center no-sort">Delete</th>
@@ -27,6 +28,7 @@
 							<td class="hidden-xs"><?php echo $user['name']; ?></td>
 							<td><?php echo $user['email']; ?></td>
 							<td><?php echo $user['dealership_name']; ?></td>
+							<td class="hidden-xs"><?php echo $user['region_name']; ?></td>
 							<td class="hidden-xs"><?php echo $user['type']; ?></td>
 							<td class="align-center">
 								<span class="btn-group">
@@ -35,7 +37,7 @@
 							</td>
 							<td class="align-center">
 								<span class="btn-group">
-									<a href="<?php echo base_url() . "users/delete/" . $user['id']; ?>" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
+									<a href="javascript:void()" onclick="javascript:delete_item('<?php echo base_url() . "users/delete/" . $user['id']; ?>')" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
 								</span>
 							</td>
 						</tr>

@@ -1,6 +1,6 @@
 	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class zones extends CI_Controller {
+class regions extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -21,14 +21,14 @@ class zones extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
-		$this->load->model('zones_model');
+		$this->load->model('regions_model');
 	}
 
 	public function index() {
-		$vars['title'] = 'Zones';
-		$vars['content_view'] = '/zones_list';
-		$vars['option']  = "zones";
-		$vars['data'] = $this->zones_model->get_all();
+		$vars['title'] = 'Regions';
+		$vars['content_view'] = '/regions_list';
+		$vars['option']  = "regions";
+		$vars['data'] = $this->regions_model->get_all();
 
 		
 		
@@ -37,18 +37,18 @@ class zones extends CI_Controller {
 	}
 
 	public function add() {
-		$vars['title'] = 'Zones';
-		$vars['content_view'] = '/zones_new';
-		$vars['option']  = "zones";
+		$vars['title'] = 'Regions';
+		$vars['content_view'] = '/regions_new';
+		$vars['option']  = "regions";
 
 		$this->load->view('template', $vars);
 	}
 
 	public function edit($id) {
-		$vars['title'] = 'Zones';
-		$vars['content_view'] = '/zones_edit';
-		$vars['option']  = "zones";
-		$vars['data'] = $this->zones_model->get_by_id($id);
+		$vars['title'] = 'Regions';
+		$vars['content_view'] = '/regions_edit';
+		$vars['option']  = "regions";
+		$vars['data'] = $this->regions_model->get_by_id($id);
 
 		
 		if (count($vars['data']) > 0) {
@@ -65,18 +65,18 @@ class zones extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 		
-		$this->zones_model->insert($this->input->post('description'), $user['id'], $date);
+		$this->regions_model->insert($this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'zones', 'location', 301);
+		redirect(base_url() . 'regions', 'location', 301);
 	}
 
 	public function update($id) {	
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 		
-		$this->zones_model->update($id, $this->input->post('description'), $user['id'], $date);
+		$this->regions_model->update($id, $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'zones', 'location', 301);
+		redirect(base_url() . 'regions', 'location', 301);
 	}
 	
 
@@ -84,8 +84,8 @@ class zones extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 
-		$this->zones_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'zones', 'location', 301);
+		$this->regions_model->delete($id, $user['id'], $date);
+		redirect(base_url() . 'regions', 'location', 301);
 	}
 
 	

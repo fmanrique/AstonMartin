@@ -125,31 +125,7 @@ class activities extends CI_Controller {
 		}
 		// FILTERS =============
 
-
-		/*$start = date($year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01');
-		$end = $start;
-		$start = date('Y-m-d', strtotime("-7 days", strtotime($end)));
-		$end = date('Y-m-d', strtotime("+1 months +7 days", strtotime($end)));*/
-
-		//$activities = $this->activities_model->get_by_dealership_dates($user['dealership_id'], $start, $end);	
 		$activities = $this->activities_model->get_by_filters($start, $end, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id);	
-
-		/*echo $start;
-		echo "<br/><br/>";
-		echo $end;
-		echo "<br/><br/>";
-		echo $category_id;
-		echo "<br/><br/>";
-		echo rtrim($happened,',');
-		echo "<br/><br/>";
-		echo rtrim($audience,',');
-		echo "<br/><br/>";
-		echo rtrim($focus,',');
-		echo "<br/><br/>";
-		echo rtrim($model,',');
-		echo "<br/><br/>";
-		echo $dealership_id;
-		echo "<br/><br/>";*/
 
 
 		$calendar = "[";
@@ -195,7 +171,7 @@ class activities extends CI_Controller {
 		$vars['focus'] = $this->focus_model->get_all();
 		$vars['frequencies'] = $this->frequency_model->get_all();
 		$vars['metrics'] = $this->metrics_model->get_all();
-		$vars['end_date'] = date('m-d-Y', strtotime('12/31'));
+		$vars['end_date'] = date('m/d/Y', strtotime('12/31'));
 
 		$parents = $this->categories_model->get_parents();
 		$childs = $this->categories_model->get_childs();
@@ -289,9 +265,8 @@ class activities extends CI_Controller {
 		$activity_metrics = array();
 		foreach ($vars['activity_metrics'] as $key => $metric) {
 			$item[0] = $key;
-			$item[1] = $metric['category_id'];
-			$item[2] = $metric['metric_id'];
-			$item[3] = $metric['quantity'];
+			$item[1] = $metric['metric_id'];
+			$item[2] = $metric['quantity'];
 
 			$activity_metrics[] = $item;
 		}
@@ -302,14 +277,14 @@ class activities extends CI_Controller {
 	}
 
 	public function save() {
-		$s_date = DateTime::createFromFormat('m-d-Y', $this->input->post('start_date'));
-		$start_date = $s_date->format( 'Y-m-d' );
+		$s_date = DateTime::createFromFormat('m/d/Y', $this->input->post('start_date'));
+		$start_date = $s_date->format( 'm/d/Y' );
 		$total_expense = $this->input->post('expense');
 
-		$end_date = date('m-d-Y', strtotime('12/31'));
+		$end_date = date('m/d/Y', strtotime('12/31'));
 		if ($this->input->post('end_date') != "") {
-			$e_date = DateTime::createFromFormat('m-d-Y', $this->input->post('end_date'));
-			$end_date = $e_date->format( 'Y-m-d' );
+			$e_date = DateTime::createFromFormat('m/d/Y', $this->input->post('end_date'));
+			$end_date = $e_date->format( 'm/d/Y' );
 		}
 
 		if ($this->input->post('repeated') == "1") {
@@ -374,7 +349,7 @@ class activities extends CI_Controller {
 		$metrics = json_decode($this->input->post('metrics'));
 
 		foreach($metrics as $key => $metric) {
-			$this->activity_metrics_model->insert($activity_id, $metric[1], $metric[2], $metric[3]);
+			$this->activity_metrics_model->insert($activity_id, $metric[1], $metric[2]);
 		}
 	}
 
@@ -413,7 +388,7 @@ class activities extends CI_Controller {
 
 		$this->activity_metrics_model->delete_by_activity_id($id);
 		foreach($metrics as $key => $metric) {
-			$this->activity_metrics_model->insert($id, $metric[1], $metric[2], $metric[3]);
+			$this->activity_metrics_model->insert($id, $metric[1], $metric[2]);
 		}
 
 		redirect(base_url() . 'activities', 'location', 301);

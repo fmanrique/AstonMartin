@@ -1,12 +1,14 @@
+
+
 <div class="row">
 	<div class="col-md-12 mb20">
-		<a href="<?php echo base_url() . "audiences/add/"; ?>" class="btn btn-primary">New Audience</a>
+		<a href="<?php echo base_url() . "regions/add/"; ?>" class="btn btn-primary">New Region</a>
 	</div>
 	<!--=== Static Table ===-->
 	<div class="col-md-12">
 		<div class="widget box">
 			<div class="widget-header">
-				<h4><i class="icon-edit"></i> Audiences</h4>
+				<h4><i class="icon-edit"></i> Region</h4>
 			</div>
 			<div class="widget-content no-padding">
 				<table class="table datatable" id="audiences">
@@ -18,17 +20,17 @@
 						</tr>
 					</thead>
 					<tbody>	
-					<?php foreach($data as $key => $audience) {?>
+					<?php foreach($data as $key => $region) {?>
 						</tr>
-							<td><?php echo $audience['description']; ?></td>
+							<td><?php echo $region['description']; ?></td>
 							<td class="align-center">
 								<span class="btn-group">
-									<a href="<?php echo base_url() . "audiences/edit/" . $audience['id']; ?>" title="Edit" class="bs-tooltip"><i class="icon-pencil"></i></a>
+									<a href="<?php echo base_url() . "regions/edit/" . $region['id']; ?>" title="Edit" class="bs-tooltip"><i class="icon-pencil"></i></a>
 								</span>
 							</td>
 							<td class="align-center">
 								<span class="btn-group">
-									<a href="javascript:void()" onclick="javascript:delete_item('<?php echo base_url() . "audiences/delete/" . $audience['id']; ?>')" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
+									<a href="javascript:void()" onclick="javascript:delete_item('<?php echo base_url() . "regions/delete/" . $region['id']; ?>')" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
 								</span>
 							</td>
 						</tr>
@@ -40,3 +42,4 @@
 	</div> <!-- /.col-md-6 -->
 	<!-- /Static Table -->
 </div> <!-- /.row -->
+

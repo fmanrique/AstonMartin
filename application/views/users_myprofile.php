@@ -40,6 +40,17 @@
 				</div>
 				<div class="row">
 					<div class="col-md-4 col-lg-2">
+						<label class="control-label">Region:</label>
+					</div>
+
+					<div class="col-md-8 col-lg-10">
+						<div class="form-group">
+							<input type="text" class="form-control" value="<?php echo $data['region_name']; ?>" disabled="disabled">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-lg-2">
 						<label class="control-label">Security Level:</label>
 					</div>
 

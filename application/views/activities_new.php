@@ -158,7 +158,7 @@
 						<input type="hidden" id="metrics" name="metrics">
 						<label class="col-md-2 control-label">Add Metrics:</label>
 						
-						<div class="col-md-3">
+						<div class="col-md-5">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">Metric</span>
@@ -172,7 +172,7 @@
 						</div>
 						
 
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">Quantity</span>
@@ -181,7 +181,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-1">
+						<div class="col-md-2">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">&nbsp;</span>
@@ -198,9 +198,9 @@
 									<table class="table" id="table_activity_metrics">
 										<thead>
 											<tr>
-												<th>Metric</th>
-												<th>Quantity</th>
-												<th style="min-width: 60px" class="align-center no-sort">Delete</th>
+												<th style="width: 60%">Metric</th>
+												<th style="width: 20%">Quantity</th>
+												<th style="width: 20%; in-width: 60px" class="align-center no-sort">Delete</th>
 											</tr>
 										</thead>
 										
@@ -273,8 +273,8 @@ $(document).ready(function() {
 		defaultDate: +7,
 		showOtherMonths:true,
 		autoSize: true,
-		appendText: '<span class="help-block">(mm-dd-yyyy)</span>',
-		dateFormat: 'mm-dd-yy'
+		appendText: '<span class="help-block">(mm/dd/yyyy)</span>',
+		dateFormat: 'mm/dd/yy'
 	});
 
     var data_input = Array();
@@ -288,30 +288,29 @@ $(document).ready(function() {
 
     	if ($('#metrics_quantity').val() != "") quantity = $('#metrics_quantity').val();
 
-    	key = search_array([0,1], [$('#metrics_type option:selected').text(), $('#metrics_metric option:selected').text()], data);
+    	key = search_array(0, $('#metrics_metric option:selected').text(), data);
 
 
     	if (key >= 0) {
-    		quantity = parseInt(data[key][2]) + parseInt(quantity);
-    		t.fnUpdate(quantity, key, 2);
+    		quantity = parseInt(data[key][1]) + parseInt(quantity);
+    		t.fnUpdate(quantity, key, 1);
     		
     		update_row_id = data_input[key][0];
-    		data_input[key] = [update_row_id, $('#metrics_type option:selected').val(), $('#metrics_metric option:selected').val(), quantity];
+    		data_input[key] = [update_row_id, $('#metrics_metric option:selected').val(), quantity];
 
     	} else {
     		t.fnAddData( [
-	            $('#metrics_type option:selected').text(),
 	            $('#metrics_metric option:selected').text(),
 	            quantity,
 	            "<span class=\"btn-group\"><a title=\"Delete\" data-row=\"" + row_id + "\" class=\"delete-activity bs-tooltip\"><i class=\"icon-remove\"></i></a></span>"
 	        ]);
 
-    		data_input.push([row_id, $('#metrics_type option:selected').val(), $('#metrics_metric option:selected').val(), quantity]);
+    		data_input.push([row_id, $('#metrics_metric option:selected').val(), quantity]);
 
     		row_id = row_id+1;
 
     	}
-		$('#table_activity_metrics tr td:nth-child(4)').addClass('align-center');
+		$('#table_activity_metrics tr td:nth-child(3)').addClass('align-center');
         
 
     } );
@@ -325,6 +324,16 @@ $(document).ready(function() {
 	});
     
     function search_array(key, value, data) {
+    	for (i = 0; i<data.length; i++) {
+    		if (data[i][key] == value) {
+    			return i;
+    		}
+    	}
+
+    	return -1;
+    }
+
+    function search_milti_array(key, value, data) {
     	found = true;
     	for (i = 0; i<data.length; i++) {
     		for (k = 0; k < key.length; k++) {

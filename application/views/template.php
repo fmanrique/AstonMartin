@@ -224,7 +224,7 @@ $user = $this->session->userdata("user_data");
 						</a>
 					</li>
 					<?php if ($user['user_type_id'] == 1) : ?>
-					<li <?php echo ($option == "catalogs" || $option == "categories" || $option == "audiences" ||  $option == "focus" || $option == "models" || $option == "metrics" || $option == "zones" || $option == "dealerships") ? "class='current'" : ""; ?>>
+					<li <?php echo ($option == "catalogs" || $option == "categories" || $option == "audiences" ||  $option == "focus" || $option == "models" || $option == "metrics" || $option == "regions" || $option == "dealerships" || $option == "currencies") ? "class='current'" : ""; ?>>
 						<a href="javascript:void(0);">
 							<i class="icon-edit"></i>
 							Catalogs
@@ -266,10 +266,16 @@ $user = $this->session->userdata("user_data");
 								Dealerships
 								</a>
 							</li>
-							<li <?php echo ($option == "zones") ? "class='current'" : ""; ?>>
-								<a href="<?php echo base_url() . "zones" ?>">
+							<li <?php echo ($option == "regions") ? "class='current'" : ""; ?>>
+								<a href="<?php echo base_url() . "regions" ?>">
 								<i class="icon-angle-right"></i>
-								Zones
+								Regions
+								</a>
+							</li>
+							<li <?php echo ($option == "currencies") ? "class='current'" : ""; ?>>
+								<a href="<?php echo base_url() . "currencies" ?>">
+								<i class="icon-angle-right"></i>
+								Currencies
 								</a>
 							</li>
 						</ul>
@@ -318,6 +324,6 @@ $user = $this->session->userdata("user_data");
 
 		</div>
 	</div>
-
+	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/main.js"></script>
 </body>
 </html>

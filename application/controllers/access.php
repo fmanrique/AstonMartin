@@ -63,15 +63,15 @@ class access extends CI_Controller {
 						$dealers[] = $dealer_all;
 					}
 					$user_data = array(
-						'id' 				=> $access[0]->id,
-						'name'				=> $access[0]->name,
-						'email'				=> $access[0]->email,
-						'user_type_id'		=> $access[0]->user_type_id,
-						'dealership_id'		=> $access[0]->dealership_id,
-						'dealership_name'	=> $access[0]->dealership_name,
-						'dealers'			=> $dealers,
-						'period'			=> date("Y"),
-						'periods'			=> $years
+						'id' 					=> $access[0]->id,
+						'name'					=> $access[0]->name,
+						'email'					=> $access[0]->email,
+						'user_type_id'			=> $access[0]->user_type_id,
+						'dealership_id'			=> $access[0]->dealership_id,
+						'dealership_name'		=> $access[0]->dealership_name,
+						'dealers'				=> $dealers,
+						'period'				=> date("Y"),
+						'periods'				=> $years
 					);
 					$this->session->set_userdata('user_data', $user_data);
 					redirect(base_url() . 'dashboard', 'location', 301);

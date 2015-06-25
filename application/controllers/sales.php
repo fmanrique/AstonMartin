@@ -25,18 +25,23 @@ class sales extends CI_Controller {
 	}
 
 
-	public function save($id) {
+	public function save() {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 
+		$sales = $this->input->post('months');
 
-		if ($id == 0) 
-			$this->sales_model->insert($user['period'], $this->input->post('month'), $this->input->post('quarter'), $this->input->post('sales'), $user['dealership_id']);
-		else
-			$this->sales_model->update($id, $user['period'], $this->input->post('month'), $this->input->post('quarter'), $this->input->post('sales'), $user['dealership_id']);
+		foreach($sales as $key => $sale) {
+			$month = $key+1;
+			if ($this->sales_model->exists($user['period'], $month, $user['dealership_id'])) {
+				$this->sales_model->update($user['period'], $month, $sale, $user['dealership_id']);
+			} else {
+				$this->sales_model->insert($user['period'], $month, $sale, $user['dealership_id']);
+			}
+		}
 
-
-		die;
+		redirect(base_url() . 'dashboard', 'location', 301);
+		
 	}
 	
 }
