@@ -19,21 +19,21 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">Dealership <span class="required">*</span></label>
-						<div class="col-md-9">
-							<select class="form-control" id="dealership_id" name="dealership_id">
-								<?php foreach($dealerships as $key => $dealership) {?>
-								<option value="<?php echo $dealership['id']; ?>" <?php echo ($dealership['id'] == $data['dealership_id']) ? "selected" : "" ?>><?php echo $dealership['name']; ?></option>
-								<?php } ?>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-md-3 control-label">Security Level <span class="required">*</span></label>
 						<div class="col-md-9">
 							<select class="form-control" id="user_type_id" name="user_type_id">
 								<?php foreach($user_types as $key => $user_type) {?>
 								<option value="<?php echo $user_type['id']; ?>" <?php echo ($user_type['id'] == $data['user_type_id']) ? "selected" : "" ?>><?php echo $user_type['type']; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Dealership <span class="required">*</span></label>
+						<div class="col-md-9">
+							<select class="form-control" id="dealership_id" name="dealership_id">
+								<?php foreach($dealerships as $key => $dealership) {?>
+								<option value="<?php echo $dealership['id']; ?>" <?php echo ($dealership['id'] == $data['dealership_id']) ? "selected" : "" ?>><?php echo $dealership['name']; ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -79,6 +79,15 @@
 
 <script language="javascript">
 	$(document).ready(function() {
+		$("#user_type_id").on('change', function(){
+			if ($("#user_type_id").val() == 2) {
+				$("#dealership_id").prop( "disabled", true );
+				$("#dealership_id").append('<option value=0 selected>All Dealerships</option>');	
+			} else {
+				$("#dealership_id").prop( "disabled", false );
+				$("#dealership_id option[value='0']").remove();
+			}
+		})
 		/*
 		$( "#form-users" ).validate({
 			rules: {

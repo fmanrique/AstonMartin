@@ -5,7 +5,7 @@ class reports_model extends CI_Model {
 		$this->load->database();
 	}
    
-	public function get_report_activities($start_date, $end_date, $category_id, $audience, $focus, $model, $dealership_id, $currency_id){
+	public function get_report_activities($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealership_id, $currency_id){
 		$filters = " ";
 		$filter_audience = " ";
 		$filter_focus = " ";
@@ -24,6 +24,10 @@ class reports_model extends CI_Model {
 			$filters.= " AND a.category_id = ".  $category_id . " " ;
 		}
 
+		if($happened!=""){
+			$filters.= " AND a.happened in ($happened) ";
+		}
+
 		if($audience!=""){
 			$filter_audience = " INNER JOIN activity_audiences X ON a.id = X.activity_id AND X.audience_id in ($audience) ";
 		}
@@ -38,7 +42,7 @@ class reports_model extends CI_Model {
 
 		$result = $this->db->query("
 
-				SELECT d.name as dealership, MONTHNAME(a.start_date) AS month_date, a.name, ca.description, DATE_FORMAT(a.start_date,'%d/%m/%Y') as start_date, a_c.audiences, a_f.focus, a.expense, a_m.models, metric, quantity
+				SELECT d.name as dealership, MONTHNAME(a.start_date) AS month_date, a.name, ca.description, DATE_FORMAT(a.start_date,'%d/%m/%Y') as start_date, a.happened, a_c.audiences, a_f.focus, a.expense, a_m.models, metric, quantity
 				FROM activities a 
 
 					$filter_audience 
@@ -69,7 +73,7 @@ class reports_model extends CI_Model {
 			
 				WHERE a.status_id = 1 
 				AND (a.dealership_id = ".$dealership_id . " OR 0=".$dealership_id.")". $filters .
-				" GROUP BY (a.start_date), a.name, ca.description, DATE_FORMAT(a.start_date, '%d/%m/%Y'), a_c.audiences,
+				" GROUP BY (a.start_date), a.name, ca.description, DATE_FORMAT(a.start_date, '%d/%m/%Y'), a.happened, a_c.audiences,
     						a_f.focus, a.expense, a_m.models, metric,quantity 
     			ORDER BY d.id, a.start_date ASC 
 
@@ -83,7 +87,7 @@ class reports_model extends CI_Model {
 		return $result->result_array(); 
 	}
 
-	public function get_report_currencies($start_date, $end_date, $category_id, $audience, $focus, $model, $dealership_id){
+	public function get_report_currencies($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealership_id){
 		$filters = " ";
 		$filter_audience = " ";
 		$filter_focus = " ";
@@ -99,6 +103,10 @@ class reports_model extends CI_Model {
 
 		if($category_id!=0){
 			$filters.= " AND a.category_id = ".  $category_id . " " ;
+		}
+
+		if($happened!=""){
+			$filters.= " AND a.happened in ($happened) ";
 		}
 
 		if($audience!=""){

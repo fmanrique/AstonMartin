@@ -1,4 +1,5 @@
 <?php setlocale(LC_MONETARY, 'en_US'); ?>
+<?php $user = $this->session->userdata("user_data"); ?>
 <div class="row">
 	<form method="post" id="form" action="<?php echo base_url() . "sales/save/"; ?>">
 		<div class="col-md-12 mb20">
@@ -24,7 +25,7 @@
 							<?php foreach($data['q'.$i] as $key => $quarter) {?>
 								</tr>
 									<td style="position: relative; top: 6px; height: 49px"><?php echo $quarter['month']; ?></td>
-									<?php if ($dealership_id != 0): ?>
+									<?php if ($dealership_id != 0 && $user['user_type_id'] != 2): ?>
 									<td><input type="text" data-id="<?php echo $quarter['sales_id']; ?>" name="months[]" data-month="<?php echo $quarter['month_id']; ?>" data-quarter="<?php echo $quarter['quarter']; ?>" id="sales<?php echo $quarter['month_id'] ?>" class="form-control required" value="<?php echo $quarter['sales']; ?>" maxlength="6"></td>
 									<?php else: ?>
 									<td style="position: relative; top: 6px; height: 49px"><?php echo $quarter['sales']; ?></td>
@@ -87,7 +88,9 @@
 						</div>
 					</div>
 
+					<?php if($dealership_id != 0 && $user['user_type_id'] != 2) : ?>
 					<input type="submit" value="Save" class="btn btn-primary pull-left">
+					<?php endif; ?>
 					
 				</div> <!-- /.widget-content -->
 			</div> <!-- /.widget -->

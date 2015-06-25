@@ -6,28 +6,29 @@ class users_model extends CI_Model {
 	}
    
 	public function get_all(){
-		$this->db->select('u.id, u.email, u.name, t.type, u.dealership_id, d.name as "dealership_name", r.description as "region_name"');
-		$this->db->from('users u');
-		$this->db->join('user_types t', 't.id = u.user_type_id', 'inner');
-		$this->db->join('dealerships d', 'd.id = u.dealership_id', 'inner');
-		$this->db->join('regions r', 'r.id = d.region_id', 'inner');
-		$this->db->where('u.status_id', 1);
+		$query = $this->db->query("
+			SELECT u.id, u.email, u.name, t.type, u.dealership_id, ifnull(d.name, 'All Dealerships') as dealership_name, ifnull(r.description, 'All Regions') as region_name 
+			FROM (users u) 
+			INNER JOIN user_types t ON t.id = u.user_type_id 
+			LEFT JOIN dealerships d ON d.id = u.dealership_id 
+			LEFT JOIN regions r ON r.id = d.region_id 
+			WHERE u.status_id = 1
+		");
 
-		$query = $this->db->get();
 		return $query->result_array();
 	}
 	
 	public function get_by_id($id){
-		$this->db->select('u.id, u.email, u.name, u.user_type_id, t.type, u.dealership_id, d.name as "dealership_name", z.description as "region_name"');
-		$this->db->from('users u');
-		$this->db->join('user_types t', 't.id = u.user_type_id', 'inner');
-		$this->db->join('dealerships d', 'd.id = u.dealership_id', 'inner');
-		$this->db->join('regions z', 'z.id = d.region_id', 'inner');
-		$this->db->where('u.id', $id);
-		$this->db->where('u.status_id', 1);
-		$this->db->limit(1);
+		$query = $this->db->query("
+			SELECT u.id, u.email, u.name, u.user_type_id, t.type, u.dealership_id, ifnull(d.name, 'All Dealerships') as dealership_name, ifnull(r.description, 'All Regions') as region_name
+			FROM (users u) 
+			INNER JOIN user_types t ON t.id = u.user_type_id 
+			LEFT JOIN dealerships d ON d.id = u.dealership_id 
+			LEFT JOIN regions r ON r.id = d.region_id 
+			WHERE u.id=$id AND u.status_id = 1
+			LIMIT 1
+		");
 
-		$query = $this->db->get();
 		return $query->result_array();
 	}
 
@@ -60,15 +61,14 @@ class users_model extends CI_Model {
 	}
 	
 	public function login($email, $password) {
-		$this->db->select('u.id, u.email, u.name, u.password, u.user_type_id, u.dealership_id, d.name as dealership_name');
-		$this->db->from('users u');
-		$this->db->join('dealerships d', 'd.id = u.dealership_id', 'inner');
-		$this->db->where('u.email', $email);
-		$this->db->where('u.password', sha1($password));
-		$this->db->where('u.status_id', 1);
-		$this->db->limit(1);
 
-		$query = $this->db->get();
+		$query = $this->db->query("
+			SELECT u.id, u.email, u.name, u.password, u.user_type_id, IFNULL(u.dealership_id, 0) AS dealership_id, IFNULL(d.name, 'All Dealerships') as dealership_name 
+			FROM (users u) 
+			LEFT JOIN dealerships d ON d.id = u.dealership_id 
+			WHERE u.email = '$email' AND u.password = '" . sha1($password) . "' AND u.status_id = 1 
+			LIMIT 1
+		");
 
 		if($query -> num_rows() == 1) {
 			return $query->result();

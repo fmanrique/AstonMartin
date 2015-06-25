@@ -31,7 +31,7 @@
 							</td>
 							<td class="align-center">
 								<span class="btn-group">
-									<a href="<?php echo base_url() . "categories/delete/" . $category['id']; ?>" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
+									<a href="javascript:void()" onclick="javascript:delete_item('<?php echo base_url() . "categories/delete/" . $category['id']; ?>')" title="Delete" class="bs-tooltip"><i class="icon-remove-sign"></i></a>
 								</span>
 							</td>
 						</tr>

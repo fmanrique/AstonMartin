@@ -24,7 +24,7 @@ class Users extends CI_Controller {
 		if (!$this->session->userdata('user_data'))  redirect(base_url()  . 'login/', 'location', 301); 
 
 		$user = $this->session->userdata("user_data");
-		if ($user['user_type_id'] != 1)  redirect(base_url()  . 'login/', 'location', 301); 
+		if ($user['user_type_id'] != 1 && $user['user_type_id'] != 2 )  redirect(base_url()  . 'login/', 'location', 301); 
 		
 		$this->load->model('users_model');
 		$this->load->model('dealerships_model');
@@ -92,7 +92,7 @@ class Users extends CI_Controller {
 
 		$this->session->set_userdata('user_data', $user_data);
 
-		redirect(base_url() . $controller, 'location', 301);	
+		redirect(base_url() . $controller, 'location');	
 	}
 
 	public function changedealer($dealership_id, $controller) {
@@ -109,7 +109,7 @@ class Users extends CI_Controller {
 
 		$this->session->set_userdata('user_data', $user_data);
 
-		redirect(base_url() . $controller, 'location', 301);	
+		redirect(base_url() . $controller, 'location');	
 	}
 
 	public function save() {
@@ -120,7 +120,7 @@ class Users extends CI_Controller {
 
 		if (!$exists) {
 			$this->users_model->insert($this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $this->input->post('password'), $user['id'], $date);
-			redirect(base_url() . 'users', 'location', 301);	
+			redirect(base_url() . 'users', 'location');	
 		} 
 		
 	}
@@ -130,7 +130,7 @@ class Users extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->users_model->update($id, $this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $user['id'], $date);
-		redirect(base_url() . 'users', 'location', 301);
+		redirect(base_url() . 'users', 'location');
 	}
 	
 
@@ -139,7 +139,7 @@ class Users extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->users_model->change_password($id, $this->input->post('password'), $user['id'], $date);
-		redirect(base_url() . 'users', 'location', 301);
+		redirect(base_url() . 'users', 'location');
 	}
 
 	public function delete($id) {	
@@ -147,7 +147,7 @@ class Users extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->users_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'users', 'location', 301);
+		redirect(base_url() . 'users', 'location');
 	}
 
 	public function myprofile() {
@@ -179,7 +179,7 @@ class Users extends CI_Controller {
 			$this->users_model->change_password($id, $this->input->post('password'), $date);
 		}
 
-		redirect(base_url() . 'users/myprofile', 'location', 301);
+		redirect(base_url() . 'users/myprofile', 'location');
 	}
 }
 

@@ -124,9 +124,7 @@ $user = $this->session->userdata("user_data");
 	});
 	</script>
 
-	<!-- Demo JS -->
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/custom.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/demo/pages_calendar.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/demo/form_validation.js"></script>
 
 </head>
@@ -159,7 +157,7 @@ $user = $this->session->userdata("user_data");
 			
 			<!-- Top Right Menu -->
 			<ul class="nav navbar-nav navbar-right">
-				<?php if ($user['user_type_id'] == 1) : ?>
+				<?php if ($user['user_type_id'] == 1 || $user['user_type_id'] == 2) : ?>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						Dealership: <?php echo $user['dealership_name']; ?>

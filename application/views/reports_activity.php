@@ -7,6 +7,20 @@
 			<div class="widget-content">
 				<form class="form-horizontal row-border" method="post" id="form" action="<?php echo base_url() . "reports/export/"; ?>">
 					<div class="form-group">
+						<label class="col-md-2 control-label">Status:</label>
+						<div class="col-md-10">
+							<div class="row">
+								<div class="col-md-12">
+									<label class="checkbox-inline">
+										<input type="checkbox" class="uniform" name="happened[]" value="1"> Happened
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" class="uniform" name="happened[]" value="0"> Not happened
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12" style="height: 12px"></div>
 						<label class="col-md-2 control-label">From:</label>
 						<div class="col-md-4">
 							<div class="row">
@@ -95,7 +109,6 @@
 		</div>
 	</div>
 </div>
-
 
 <script language="javascript">
 $(document).ready(function() {

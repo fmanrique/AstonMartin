@@ -55,7 +55,7 @@ class access extends CI_Controller {
 					} 
 
 					$dealers = array();
-					if ($access[0]->user_type_id == 1) {
+					if ($access[0]->user_type_id == 1 || $access[0]->user_type_id == 2) {
 						$dealers = $this->dealerships_model->get_all();
 						$dealer_all['id'] = 0;
 						$dealer_all['name'] = 'All Dealerships';
