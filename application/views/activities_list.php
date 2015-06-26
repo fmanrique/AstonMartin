@@ -1,4 +1,4 @@
-<?php $user = $this->session->userdata("user_data"); ?>
+	<?php $user = $this->session->userdata("user_data"); ?>
 <div class="row">
 	<div class="col-md-12">
 		<div class="widget box">
@@ -8,7 +8,7 @@
 			<div class="widget-content" id="activity_filters">
 				<form class="form-horizontal row-border" method="post" id="form" action="<?php echo base_url() . "reports/export/"; ?>">
 					<div class="form-group">
-						<label class="col-md-2 control-label">Status:</label>
+						<label class="col-md-2 control-label">Status:</label>	
 						<div class="col-md-10">
 							<div class="row">
 								<div class="col-md-12">
@@ -47,7 +47,7 @@
 									<select class="form-control" id="category" name="category" style="width: 200px">
 										<option value="0">All</option>
 										<?php foreach($categories as $key => $category) {?>
-										<?php if (!empty($category['childs'])) : ?>
+										<?php if (!empty($category['childs'])) : ?> 
 											<optgroup label="<?php echo $category['description']; ?>">
 												<?php foreach($category['childs'] as $key2 => $subcategory) {?>
 													<option value="<?php echo $subcategory['id']; ?>"><?php echo $subcategory['description']; ?></option>
@@ -68,7 +68,7 @@
 								<div class="col-md-12">
 									<?php foreach($audiences as $key => $audience) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"> <?php echo $audience['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"><?php echo $audience['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -81,7 +81,7 @@
 								<div class="col-md-12">
 									<?php foreach($focus as $key => $item) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"> <?php echo $item['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"><?php echo $item['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -93,8 +93,8 @@
 							<div class="row">
 								<div class="col-md-12">
 									<?php foreach($models as $key => $model) { ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]"> <?php echo $model['description']; ?>
+									<label class="checkbox-inline modelfocus">
+										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]"><?php echo $model['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -126,6 +126,25 @@ $(document).ready(function() {
         }else{
             $('#field-frequency').hide();
         }
+    });
+
+    $(".modelfocus:contains('All')").find("input[type='checkbox']").change(function() {  //on click 
+        if(this.checked) {
+			$("input[name='model[]']").each(function() {
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', true);
+					$(this).parent().parent().addClass('disabled');
+				}
+			});
+		} else {
+			$("input[name='model[]']").each(function() {
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', false);
+					$(this).parent().parent().removeClass('disabled');
+				}
+				
+			});
+		}
     });
 
     $( ".datepicker" ).datepicker({
@@ -233,11 +252,11 @@ function show_filters() {
 
 
 <div class="row">
-	<?php if ($user['user_type_id'] != 2): ?>
+	
 	<div class="col-md-12 mb20">
 		<a href="<?php echo base_url() . "activities/add/"; ?>" class="btn btn-primary">New Activity</a>
 	</div>
-	<?php endif; ?>
+	
 	<!--=== Static Table ===-->
 	<div class="col-md-12">
 		<div class="widget">
@@ -352,10 +371,10 @@ function show_filters() {
 	        },
 			eventRender: function(event, element) {
 				icon = event.happened == 0 ? "icon-check-empty" : "icon-check";
-				<?php if ($user['user_type_id'] != 2): ?>
+				
 				element.find(".fc-event-inner").before($("<span class=\"fc-event-icons\"></span>").html("<a href=\"javascript:void(0);\"\ onclick=\"javascript:deleteCalendarEvent(this," + event.id + ");\" style=\"text-decoration: none; color: #cccccc;\"><i class=\"icon-remove\" style=\"float: right; position: relative; margin: 2px\"></i></a>"));
 				element.find(".fc-event-inner").before($("<span class=\"fc-event-icons\"></span>").html("<a href=\"javascript:void(0);\"\ style=\"text-decoration: none;\"><i class=\"" + icon + "\" onclick=\"javascript:changeStatusCalendarEvent(this," + event.id + "," + event.happened + ");\" onmouseover=\"javascript:statusCheckOver(this, "+event.happened+")\" onmouseout=\"javascript:statusCheckOut(this,"+event.happened+")\" style=\"float: left; position: relative; margin: 2px; color: #FFFFFF;\"></i></a>"));
-				<?php endif; ?>
+				
 			}
 		});	
 	}

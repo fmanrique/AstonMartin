@@ -81,7 +81,14 @@ class reports extends CI_Controller {
 		$start_date = $_POST["start_date"];
 		$end_date = $_POST["end_date"];
 		$category_id = $_POST["category_id"];
-		$dealership_id = $user['dealership_id'];
+		$dealers = $user['dealers'];
+		$dealerships = "";
+
+		foreach ($dealers as $key => $dealer) {
+			$dealerships .= $dealer['id'].',';
+		}
+
+		$dealerships = substr($dealerships, 0, -1);
 
 		if(isset($_POST["happened"])) {
 			foreach ($_POST["happened"] as $item) {
@@ -107,7 +114,7 @@ class reports extends CI_Controller {
 			}
 		}
 
-		$currencies = $this->reports_model->get_report_currencies($start_date, $end_date, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id);
+		$currencies = $this->reports_model->get_report_currencies($start_date, $end_date, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealerships);
 
 		if ($currencies) {
 
@@ -118,7 +125,7 @@ class reports extends CI_Controller {
 
 
 			foreach($currencies as $key => $currency) {
-				$activities = $this->reports_model->get_report_activities($start_date, $end_date, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id, $currency['currency_id']);
+				$activities = $this->reports_model->get_report_activities($start_date, $end_date, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealerships, $currency['currency_id']);
 				$objWorkSheet = $objPHPExcel->createSheet($key);
 
 

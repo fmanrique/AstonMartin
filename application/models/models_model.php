@@ -4,6 +4,12 @@ class models_model extends CI_Model {
 	function __construct(){
 		$this->load->database();
 	}
+
+	public function get_list(){
+		//Get only actives
+		$query = $this->db->get_where('models', array('status_id' => 1, 'description !=' => 'All'));
+		return $query->result_array();
+	}
    
 	public function get_all(){
 		//Get only actives

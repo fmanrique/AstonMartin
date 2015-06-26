@@ -143,14 +143,9 @@ class activities extends CI_Controller {
 			$calendar .= "\"start\":" . date_timestamp_get($start_date) . ",";
 			$calendar .= "\"allDay\":\"true\",";
 			$calendar .= "\"happened\":\"" . $activity['happened'] . "\",";
+			$calendar .= "\"backgroundColor\":\"".$activity['color']."\",";
+			$calendar .= "\"url\":\"" . base_url() . "activities/edit/" . $activity['id'] . "\"";
 			
-			if ($user['user_type_id'] != 2) {
-				$calendar .= "\"backgroundColor\":\"".$activity['color']."\",";
-				$calendar .= "\"url\":\"" . base_url() . "activities/edit/" . $activity['id'] . "\"";
-			} else {
-				$calendar .= "\"backgroundColor\":\"".$activity['color']."\"";
-			}
-
 			$calendar .= "},";
 			
 		}

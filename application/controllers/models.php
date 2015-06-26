@@ -28,7 +28,7 @@ class models extends CI_Controller {
 		$vars['title'] = 'Models';
 		$vars['content_view'] = '/models_list';
 		$vars['option']  = "models";
-		$vars['data'] = $this->models_model->get_all();
+		$vars['data'] = $this->models_model->get_list();
 
 		
 		

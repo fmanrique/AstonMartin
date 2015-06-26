@@ -25,7 +25,7 @@
 							<?php foreach($data['q'.$i] as $key => $quarter) {?>
 								</tr>
 									<td style="position: relative; top: 6px; height: 49px"><?php echo $quarter['month']; ?></td>
-									<?php if ($dealership_id != 0 && $user['user_type_id'] != 2): ?>
+									<?php if ($dealership_id != 0): ?>
 									<td><input type="text" data-id="<?php echo $quarter['sales_id']; ?>" name="months[]" data-month="<?php echo $quarter['month_id']; ?>" data-quarter="<?php echo $quarter['quarter']; ?>" id="sales<?php echo $quarter['month_id'] ?>" class="form-control required" value="<?php echo $quarter['sales']; ?>" maxlength="6"></td>
 									<?php else: ?>
 									<td style="position: relative; top: 6px; height: 49px"><?php echo $quarter['sales']; ?></td>
@@ -54,6 +54,19 @@
 							</div>
 						</div>
 					</div>
+					<?php if($user['dealership_id'] != 0): ?>
+					<div class="row mb30">
+						<div class="col-md-7">
+							<span class="control-label" style="font-size: 20px">Per unit new car sales revenue: </span>
+						</div>
+
+						<div class="col-md-5">
+							<div class="form-group">
+								<span class="control-label" id="targeted"  data-amount="<?php echo $totals['targeted']; ?>"  style="font-size: 20px; white-space: nowrap">$ <?php echo number_format($dealership_revenue, '2'); ?></span>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
 					<div class="row mb30">
 						<div class="col-md-7">
 							<span class="control-label"  style="font-size: 20px">New Car Sales Revenue (Gross): </span>
@@ -88,7 +101,7 @@
 						</div>
 					</div>
 
-					<?php if($dealership_id != 0 && $user['user_type_id'] != 2) : ?>
+					<?php if($dealership_id != 0) : ?>
 					<input type="submit" value="Save" class="btn btn-primary pull-left">
 					<?php endif; ?>
 					

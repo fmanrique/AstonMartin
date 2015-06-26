@@ -28,12 +28,22 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" id="dealership_field" style="display: <?php echo ($data['user_type_id'] == 2 ? "none" : "block") ?>">
 						<label class="col-md-3 control-label">Dealership <span class="required">*</span></label>
 						<div class="col-md-9">
 							<select class="form-control" id="dealership_id" name="dealership_id">
 								<?php foreach($dealerships as $key => $dealership) {?>
 								<option value="<?php echo $dealership['id']; ?>" <?php echo ($dealership['id'] == $data['dealership_id']) ? "selected" : "" ?>><?php echo $dealership['name']; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group" id="region_field" style="display: <?php echo ($data['user_type_id'] == 2 ? "block" : "none") ?>">
+						<label class="col-md-3 control-label">Region <span class="required">*</span></label>
+						<div class="col-md-9">
+							<select class="form-control" id="region_id" name="region_id">
+								<?php foreach($regions as $key => $region) {?>
+								<option value="<?php echo $region['id']; ?>" <?php echo ($region['id'] == $data['region_id']) ? "selected" : "" ?>><?php echo $region['description']; ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -81,11 +91,11 @@
 	$(document).ready(function() {
 		$("#user_type_id").on('change', function(){
 			if ($("#user_type_id").val() == 2) {
-				$("#dealership_id").prop( "disabled", true );
-				$("#dealership_id").append('<option value=0 selected>All Dealerships</option>');	
+				$("#dealership_field").hide();
+				$("#region_field").show();
 			} else {
-				$("#dealership_id").prop( "disabled", false );
-				$("#dealership_id option[value='0']").remove();
+				$("#dealership_field").show();
+				$("#region_field").hide();
 			}
 		})
 		/*

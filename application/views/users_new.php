@@ -28,12 +28,22 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" id="dealership_field">
 						<label class="col-md-3 control-label">Dealership <span class="required">*</span></label>
 						<div class="col-md-9">
 							<select class="form-control" id="dealership_id" name="dealership_id">
 								<?php foreach($dealerships as $key => $dealership) {?>
 								<option value="<?php echo $dealership['id']; ?>"><?php echo $dealership['name']; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group" style="display: none" id="region_field">
+						<label class="col-md-3 control-label">Region <span class="required">*</span></label>
+						<div class="col-md-9">
+							<select class="form-control" id="region_id" name="region_id">
+								<?php foreach($regions as $key => $region) {?>
+								<option value="<?php echo $region['id']; ?>"><?php echo $region['description']; ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -83,5 +93,15 @@
 				}
 			}
 		});
+
+		$("#user_type_id").on('change', function(){
+			if ($("#user_type_id").val() == 2) {
+				$("#dealership_field").hide();
+				$("#region_field").show();
+			} else {
+				$("#dealership_field").show();
+				$("#region_field").hide();
+			}
+		})
 	});
 </script>

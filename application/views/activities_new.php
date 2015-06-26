@@ -45,7 +45,7 @@
 								<div class="col-md-12">
 									<?php foreach($audiences as $key => $audience) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"> <?php echo $audience['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"><?php echo $audience['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -58,7 +58,7 @@
 								<div class="col-md-12">
 									<?php foreach($focus as $key => $item) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"> <?php echo $item['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"><?php echo $item['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -68,15 +68,12 @@
 						<label class="col-md-2 control-label">Model Focus</label>
 						<div class="col-md-10">
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-12 ">
 									<?php foreach($models as $key => $model) { ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]"> <?php echo $model['description']; ?>
+									<label class="checkbox-inline modelfocus">
+										<input type="checkbox" class="uniform" id="model_<?php echo $model['id']; ?>" value="<?php echo $model['id']; ?>" name="model[]"><?php echo $model['description']; ?>
 									</label>
 									<?php } ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="0" id="all_models"> All
-									</label>
 								</div>
 							</div>
 						</div>
@@ -253,21 +250,25 @@ $(document).ready(function() {
         }
     });
 
-    $("#all_models").change(function() {  //on click 
+    $(".modelfocus:contains('All')").find("input[type='checkbox']").change(function() {  //on click 
         if(this.checked) {
 			$("input[name='model[]']").each(function() {
-				$(this).prop('checked', true);
-				$(this).parent().addClass('checked');
-				//alert( $(this).val() );
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', true);
+					$(this).parent().parent().addClass('disabled');
+				}
 			});
 		} else {
 			$("input[name='model[]']").each(function() {
-				$(this).prop('checked', false);
-				$(this).parent().removeClass('checked');
-				//alert( $(this).val() );
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', false);
+					$(this).parent().parent().removeClass('disabled');
+				}
+				
 			});
 		}
     });
+
 
     $( ".datepicker" ).datepicker({
 		defaultDate: +7,

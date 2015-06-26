@@ -30,16 +30,41 @@ class access extends CI_Controller {
 
 	public function login() {
 		if($this->session->userdata('user_data')) {
-			redirect(base_url() . 'dashboard', 'location', 301);
+			redirect(base_url() . 'dashboard');
 		} else {
 			if ($this->input->post('email') != "") {
 				$this->load->model('users_model');
 				$this->load->model('activities_model');
 				$this->load->model('dealerships_model');
+				$this->load->model('regions_model');
 				$access = $this->users_model->login($this->input->post('email'),$this->input->post('password'));				
 
 				if($access) {
 					$periods = $this->activities_model->get_periods();
+					$dealers = array();
+
+					switch ($access[0]->user_type_id) {
+						case 1:
+							$dealers = $this->dealerships_model->get_all();
+							$dealer_all['id'] = 0;
+							$dealer_all['name'] = 'All Dealerships';
+							$dealer_all['description'] = 'All Dealerships';
+							$dealers[] = $dealer_all;
+							break;
+						case 2:
+							$dealers = $this->dealerships_model->get_by_region($access[0]->region_id);
+							$dealer_all['id'] = 0;
+							$dealer_all['name'] = 'All Dealerships';
+							$dealer_all['description'] = 'All Dealerships';
+							$dealers[] = $dealer_all;
+							# code...
+							break;
+						default:
+							$dealers = $this->dealerships_model->get_by_user($access[0]->id);
+							# code...
+							break;
+					}
+					
 
 					$years = array();
 					$current_year = date("Y");
@@ -54,21 +79,15 @@ class access extends CI_Controller {
 						}
 					} 
 
-					$dealers = array();
-					if ($access[0]->user_type_id == 1 || $access[0]->user_type_id == 2) {
-						$dealers = $this->dealerships_model->get_all();
-						$dealer_all['id'] = 0;
-						$dealer_all['name'] = 'All Dealerships';
-						$dealer_all['description'] = 'All Dealerships';
-						$dealers[] = $dealer_all;
-					}
+					
+					
 					$user_data = array(
 						'id' 					=> $access[0]->id,
 						'name'					=> $access[0]->name,
 						'email'					=> $access[0]->email,
 						'user_type_id'			=> $access[0]->user_type_id,
-						'dealership_id'			=> $access[0]->dealership_id,
-						'dealership_name'		=> $access[0]->dealership_name,
+						'dealership_id'			=> $dealers[0]['id'],
+						'dealership_name'		=> $dealers[0]['name'],
 						'dealers'				=> $dealers,
 						'period'				=> date("Y"),
 						'periods'				=> $years

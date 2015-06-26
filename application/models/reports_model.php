@@ -5,7 +5,7 @@ class reports_model extends CI_Model {
 		$this->load->database();
 	}
    
-	public function get_report_activities($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealership_id, $currency_id){
+	public function get_report_activities($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealerships, $currency_id){
 		$filters = " ";
 		$filter_audience = " ";
 		$filter_focus = " ";
@@ -37,7 +37,7 @@ class reports_model extends CI_Model {
 		}
 
 		if($model!=""){
-			$filter_model = " INNER JOIN activity_models Z ON a.id = Z.activity_id AND Z.model_id in ($model) ";
+			$filter_model = " INNER JOIN activity_models Z ON a.id = Z.activity_id AND Z.model_id in ($model) OR Z.model_id = 7 ";
 		}
 
 		$result = $this->db->query("
@@ -72,7 +72,7 @@ class reports_model extends CI_Model {
 								GROUP BY activity_id) a_me ON a.id = a_me.activity_id 
 			
 				WHERE a.status_id = 1 
-				AND (a.dealership_id = ".$dealership_id . " OR 0=".$dealership_id.")". $filters .
+				AND (a.dealership_id IN (".$dealerships.") )". $filters .
 				" GROUP BY (a.start_date), a.name, ca.description, DATE_FORMAT(a.start_date, '%d/%m/%Y'), a.happened, a_c.audiences,
     						a_f.focus, a.expense, a_m.models, metric,quantity 
     			ORDER BY d.id, a.start_date ASC 
@@ -87,7 +87,7 @@ class reports_model extends CI_Model {
 		return $result->result_array(); 
 	}
 
-	public function get_report_currencies($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealership_id){
+	public function get_report_currencies($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealerships){
 		$filters = " ";
 		$filter_audience = " ";
 		$filter_focus = " ";
@@ -131,7 +131,7 @@ class reports_model extends CI_Model {
 					LEFT JOIN dealerships d ON a.dealership_id = d.id
 					LEFT JOIN currencies c ON c.id = d.currency_id
 				WHERE a.status_id = 1 
-				AND (a.dealership_id = ".$dealership_id . " OR 0=".$dealership_id.")". $filters . " AND c.id IS NOT NULL");
+				AND (a.dealership_id IN (".$dealerships . ") )". $filters . " AND c.id IS NOT NULL");
 
 		//print $this->db->last_query();
 		//exit();

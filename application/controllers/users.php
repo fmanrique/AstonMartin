@@ -28,6 +28,7 @@ class Users extends CI_Controller {
 		
 		$this->load->model('users_model');
 		$this->load->model('dealerships_model');
+		$this->load->model('regions_model');
 	}
 
 	public function index()
@@ -47,6 +48,7 @@ class Users extends CI_Controller {
 		$vars['content_view'] = '/users_new';
 		$vars['user_types'] = $this->users_model->get_user_types();
 		$vars['dealerships'] = $this->dealerships_model->get_all();
+		$vars['regions'] = $this->regions_model->get_all();
 		$vars['option']  = "users";
 
 		$this->load->view('template', $vars);
@@ -59,7 +61,10 @@ class Users extends CI_Controller {
 		$vars['data'] = $this->users_model->get_by_id($id);
 		$vars['user_types'] = $this->users_model->get_user_types();
 		$vars['dealerships'] = $this->dealerships_model->get_all();
+		$vars['regions'] = $this->regions_model->get_all();
 		$vars['option']  = "users";
+
+
 
 		if (count($vars['data']) > 0) {
 			$vars['data'] = $vars['data'][0];
@@ -116,10 +121,10 @@ class Users extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 
-		$exists = $this->users_model->get_by_email($this->input->post('email'));
+		$exists = $this->users_model->get_by_email($this->input->post('email'));		
 
 		if (!$exists) {
-			$this->users_model->insert($this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $this->input->post('password'), $user['id'], $date);
+			$this->users_model->insert($this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $this->input->post('region_id'), $this->input->post('password'), $user['id'], $date);
 			redirect(base_url() . 'users', 'location');	
 		} 
 		
@@ -129,7 +134,7 @@ class Users extends CI_Controller {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 
-		$this->users_model->update($id, $this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $user['id'], $date);
+		$this->users_model->update($id, $this->input->post('name'), $this->input->post('email'), $this->input->post('user_type_id'),$this->input->post('dealership_id'), $this->input->post('region_id'), $user['id'], $date);
 		redirect(base_url() . 'users', 'location');
 	}
 	

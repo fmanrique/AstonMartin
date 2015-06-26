@@ -280,10 +280,10 @@ h3 {
  * Links
  * * * * * * * * * * * */
 a {
-  color: #004F32;
+  color: #666666;
 }
 a:hover {
-  color: #004F32;
+  color: #555555;
 }
 /* * * * * * * * * * * *
  * Text Colors
@@ -303,7 +303,8 @@ span.red {
   z-index: 10030;
 }
 .navbar {
-  background: #004F32;
+  /*background: #004F32; */
+  background: #000000;
   min-height: 48px;
   filter: none;
   top: 0;
@@ -398,10 +399,10 @@ span.red {
 }
 .navbar .nav > li {
   line-height: 28px;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid #666666;
 }
 .navbar .nav > li:first-child {
-  border-left: 1px solid rgba(0, 0, 0, 0.21);
+  border-left: 1px solid #666666;
 }
 .navbar .nav > li.nav-toggle {
   display: none;
@@ -412,7 +413,7 @@ span.red {
 .navbar .nav li.dropdown.open.active > .dropdown-toggle,
 .navbar .toggle-sidebar:active {
   color: #ffffff;
-  background: #008c59;
+  background: #666666;
   -webkit-box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset;
   -moz-box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset;
   box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset;
@@ -1303,17 +1304,17 @@ span.red {
  * * * * * * * * * * * */
 .btn-primary {
   color: #ffffff;
-  background-color: #19744C;
+  background-color: #666666;
   z-index: 2;
 }
 .btn-primary:hover,
 .btn-primary:focus {
   color: #ffffff;
-  background-color: #008c59;
+  background-color: #555555;
 }
 .btn-primary:active,
 .btn-primary.active {
-  background-color: #008c59;
+  background-color: #555555;
   border-top: 1px solid #1c3463;
 }
 .btn-primary.disabled,
@@ -2772,7 +2773,7 @@ label > span.required {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #004F32;
+  background-color: #666666;
   border-color: #3c5a74;
 }
 /* * * * * * * * * * * *

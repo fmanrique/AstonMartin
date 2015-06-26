@@ -15,8 +15,8 @@
 						<tr>
 							<th class="hidden-xs">Name</th>
 							<th>Email</th>
-							<th>Dealership</th>
 							<th class="hidden-xs">Region</th>
+							<th>Dealership</th>
 							<th class="hidden-xs">Security Level</th>
 							<th class="align-center no-sort">Edit</th>
 							<th class="align-center no-sort">Delete</th>
@@ -27,8 +27,8 @@
 						<tr>
 							<td class="hidden-xs"><?php echo $user['name']; ?></td>
 							<td><?php echo $user['email']; ?></td>
-							<td><?php echo $user['dealership_name']; ?></td>
 							<td class="hidden-xs"><?php echo $user['region_name']; ?></td>
+							<td><?php echo $user['dealership_name']; ?></td>
 							<td class="hidden-xs"><?php echo $user['type']; ?></td>
 							<td class="align-center">
 								<span class="btn-group">

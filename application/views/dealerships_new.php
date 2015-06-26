@@ -23,7 +23,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label">Per unit new car sales revenue <span class="required">*</span></label>
 						<div class="col-md-10">
-							<input type="text" name="revenue" class="form-control required" placeholder="$ 0.00" value="<?php echo $data['revenue']; ?>">
+							<input type="text" name="revenue" class="form-control required" placeholder="$ 0.00" value="">
 						</div>			
 					</div>
 

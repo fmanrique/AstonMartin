@@ -58,7 +58,7 @@
 								<div class="col-md-12">
 									<?php foreach($audiences as $key => $audience) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]" <?php echo ($audience['checked'] == 1) ? "checked" : "" ?>> <?php echo $audience['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]" <?php echo ($audience['checked'] == 1) ? "checked" : "" ?>><?php echo $audience['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -71,7 +71,7 @@
 								<div class="col-md-12">
 									<?php foreach($focus as $key => $item) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]" <?php echo ($item['checked'] == 1) ? "checked" : "" ?>> <?php echo $item['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]" <?php echo ($item['checked'] == 1) ? "checked" : "" ?>><?php echo $item['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -83,13 +83,10 @@
 							<div class="row">
 								<div class="col-md-12">
 									<?php foreach($models as $key => $model) { ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]" <?php echo ($model['checked'] == 1) ? "checked" : "" ?>> <?php echo $model['description']; ?>
+									<label class="checkbox-inline modelfocus">
+										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]" <?php echo ($model['checked'] == 1) ? "checked" : "" ?>><?php echo $model['description']; ?>
 									</label>
 									<?php } ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="0" id="all_models"> All
-									</label>
 								</div>
 							</div>
 						</div>
@@ -214,30 +211,35 @@ $(document).ready(function() {
 	    return true;
 	});
 
-	var all_model_focus = true;
-	$("input[name='model[]']").each(function() {
-		if (!this.checked) {
-			all_model_focus = false;
-		}
-	});
-
-	if (all_model_focus) {
-		$("#all_models").prop('checked', true);
-		$("#all_models").parent().addClass('checked');
+	if ($(".modelfocus:contains('All')").find("input[type='checkbox']")[0].checked) {
+		$("input[name='model[]']").each(function() {
+			if ($(this).parent().context.labels[0].innerText != "All") {
+				$(this).attr('disabled', true);
+				$(this).parent().parent().addClass('disabled');
+				$(this).prop('checked', false);
+				$(this).parent().removeClass('checked');
+			}
+		});
 	}
 
-	$("#all_models").change(function() {  //on click 
+
+    $(".modelfocus:contains('All')").find("input[type='checkbox']").change(function() {  //on click 
         if(this.checked) {
 			$("input[name='model[]']").each(function() {
-				$(this).prop('checked', true);
-				$(this).parent().addClass('checked');
-				//alert( $(this).val() );
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', true);
+					$(this).parent().parent().addClass('disabled');
+					$(this).prop('checked', false);
+					$(this).parent().removeClass('checked');
+				}
 			});
 		} else {
 			$("input[name='model[]']").each(function() {
-				$(this).prop('checked', false);
-				$(this).parent().removeClass('checked');
-				//alert( $(this).val() );
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', false);
+					$(this).parent().parent().removeClass('disabled');
+				}
+				
 			});
 		}
     });

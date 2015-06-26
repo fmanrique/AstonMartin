@@ -1,4 +1,4 @@
-	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class regions extends CI_Controller {
 
@@ -67,7 +67,7 @@ class regions extends CI_Controller {
 		
 		$this->regions_model->insert($this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'regions', 'location', 301);
+		redirect(base_url() . 'regions');
 	}
 
 	public function update($id) {	
@@ -76,7 +76,7 @@ class regions extends CI_Controller {
 		
 		$this->regions_model->update($id, $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'regions', 'location', 301);
+		redirect(base_url() . 'regions');
 	}
 	
 
@@ -85,7 +85,7 @@ class regions extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->regions_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'regions', 'location', 301);
+		redirect(base_url() . 'regions');
 	}
 
 	

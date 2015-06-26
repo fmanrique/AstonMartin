@@ -143,7 +143,7 @@ $user = $this->session->userdata("user_data");
 
 			<!-- Logo -->
 			<a class="navbar-brand" href="<?php echo base_url(); ?>">
-				<img src="<?php echo base_url(); ?>assets/img/AstonMartinLogo.svg" alt="logo" style="max-width: 100%; height: 36px" />
+				<img src="<?php echo base_url(); ?>assets/img/logo_am.png" alt="logo" style="max-width: 100%; height: 36px" />
 			</a>
 			<!-- /logo -->
 
@@ -157,6 +157,7 @@ $user = $this->session->userdata("user_data");
 			
 			<!-- Top Right Menu -->
 			<ul class="nav navbar-nav navbar-right">
+				
 				<?php if ($user['user_type_id'] == 1 || $user['user_type_id'] == 2) : ?>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -281,7 +282,7 @@ $user = $this->session->userdata("user_data");
 					<li <?php echo ($option == "users") ? "class='current'" : ""; ?>>
 						<a href="<?php echo base_url() . "users" ?>">
 							<i class="icon-user"></i>
-							Dealer Users
+							Users
 						</a>
 					</li>
 					<?php endif; ?>

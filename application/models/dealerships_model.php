@@ -41,6 +41,26 @@ class dealerships_model extends CI_Model {
 		
 	}
 
+	public function get_by_region($region_id){
+		//Get only actives
+		$query = $this->db->get_where('dealerships', array('region_id' => $region_id, 'status_id' => 1));
+		return $query->result_array();
+		
+	}
+
+	public function get_by_user($user_id) {
+		$query = $this->db->query("
+			SELECT u.dealership_id, d.name as dealership_name, r.description as region_name
+			FROM dealerships d 
+			INNER JOIN users u ON d.id = u.dealership_id 
+			INNER JOIN regions r ON r.id = d.region_id 
+			WHERE u.id=$id AND u.status_id = 1
+			LIMIT 1
+		");
+
+		return $query->result_array();
+	}
+
 	public function insert($name, $description, $revenue, $currency_id, $region_id, $user_id, $date){
 		$data = array(
 			'name' => $name,

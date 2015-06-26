@@ -45,9 +45,10 @@ class dashboard extends CI_Controller {
 		$sumamry['gross'] = 0;
 		$sumamry['marketing'] = 0;
 
+	
 		if ($user['dealership_id'] == 0) {
 			$sales = $this->sales_model->get_by_period($user['period']);
-			$dealerships = $this->dealerships_model->get_all();
+			$dealerships = $user['dealers'];
 			$sumamry['spend'] = $this->activities_model->get_sales_by_date($user["period"]);
 			$vars['dealership_revenue'] = 1;
 		} else {
@@ -92,11 +93,11 @@ class dashboard extends CI_Controller {
 			$sumamry['targeted'] += $totals['sales'];
 			$sumamry['gross'] += $totals['sales'] * $totals['revenue'];
 			$sumamry['marketing'] += ($totals['sales'] * $totals['revenue'])*0.015;
-
 		}
 
 		$vars['data'] = $data;
 		$vars['dealership_id'] = $user['dealership_id'];
+		
 		$vars['totals'] = $sumamry;
 
 				

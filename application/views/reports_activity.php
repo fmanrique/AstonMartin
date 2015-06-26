@@ -67,7 +67,7 @@
 								<div class="col-md-12">
 									<?php foreach($audiences as $key => $audience) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"> <?php echo $audience['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $audience['id']; ?>" name="audience[]"><?php echo $audience['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -80,7 +80,7 @@
 								<div class="col-md-12">
 									<?php foreach($focus as $key => $item) { ?>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"> <?php echo $item['description']; ?>
+										<input type="checkbox" class="uniform" value="<?php echo $item['id']; ?>" name="focus[]"><?php echo $item['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -92,8 +92,8 @@
 							<div class="row">
 								<div class="col-md-12">
 									<?php foreach($models as $key => $model) { ?>
-									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]"> <?php echo $model['description']; ?>
+									<label class="checkbox-inline modelfocus">
+										<input type="checkbox" class="uniform" value="<?php echo $model['id']; ?>" name="model[]"><?php echo $model['description']; ?>
 									</label>
 									<?php } ?>
 								</div>
@@ -124,6 +124,25 @@ $(document).ready(function() {
         }else{
             $('#field-frequency').hide();
         }
+    });
+
+    $(".modelfocus:contains('All')").find("input[type='checkbox']").change(function() {  //on click 
+        if(this.checked) {
+			$("input[name='model[]']").each(function() {
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', true);
+					$(this).parent().parent().addClass('disabled');
+				}
+			});
+		} else {
+			$("input[name='model[]']").each(function() {
+				if ($(this).parent().context.labels[0].innerText != "All") {
+					$(this).attr('disabled', false);
+					$(this).parent().parent().removeClass('disabled');
+				}
+				
+			});
+		}
     });
 
     $( ".datepicker" ).datepicker({
