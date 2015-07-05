@@ -1,3 +1,4 @@
+<?php $user = $this->session->userdata("user_data"); ?>
 <div class="row">
 	<div class="col-md-12">
 		<div class="widget box">
@@ -6,6 +7,22 @@
 			</div>
 			<div class="widget-content">
 				<form class="form-horizontal row-border" method="post" id="form" action="<?php echo base_url() . "activities/save/"; ?>">
+					<?php if ($user['dealership_id'] == 0): ?>
+					<div class="form-group">
+						<label class="col-md-2 control-label">Dealership: <span class="required">*</span></label>
+						<div class="col-md-10">
+							<div class="row">
+								<div class="col-md-6">
+									<select class="form-control" id="dealership_id" name="dealership_id">
+										<?php foreach($dealerships as $key => $dealership) {?>
+										<option value="<?php echo $dealership['id']; ?>"><?php echo $dealership['name']; ?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
 					<div class="form-group">
 						<label class="col-md-2 control-label">Name: <span class="required">*</span></label>
 						<div class="col-md-10">

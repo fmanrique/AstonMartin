@@ -11,6 +11,18 @@ class regions_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function get_all_simple(){
+		//Get only actives
+		$this->db->select('r.id, r.description');
+		$this->db->from('regions r');
+		$this->db->where('r.status_id', 1);
+		$this->db->order_by('r.description');
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
 	public function get_by_id($id){
 		//Get only actives
 		$query = $this->db->get_where('regions', array('id' => $id, 'status_id' => 1));

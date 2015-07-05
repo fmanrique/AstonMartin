@@ -20,7 +20,7 @@ class regions extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('regions_model');
 	}
 

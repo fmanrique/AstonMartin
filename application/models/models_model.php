@@ -17,6 +17,14 @@ class models_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function get_model_all(){
+		//Get only actives
+		$query = $this->db->get_where('models', array('description' => 'All'));
+		$data =  $query->result_array();
+
+		if ($data) return $data[0];
+	}
+
 	public function get_by_id($id){
 		//Get only actives
 		$query = $this->db->get_where('models', array('id' => $id, 'status_id' => 1));

@@ -62,7 +62,7 @@
 <body class="login">
 	<!-- Logo -->
 	<div class="logo">
-		<img src="<?php echo base_url(); ?>assets/img/AstonMartinLogo.svg" alt="logo" />
+		<img src="<?php echo base_url(); ?>assets/img/logo_am.png" alt="logo" />
 		<h2>Dealer Marketing Plan Builder</h2>
 	</div>
 

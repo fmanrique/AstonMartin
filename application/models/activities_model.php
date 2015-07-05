@@ -44,7 +44,7 @@ class activities_model extends CI_Model {
 
 	/************************************/
 
-	public function get_by_filters($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealership_id){
+	public function get_by_filters($start_date, $end_date, $category_id, $happened, $audience, $focus, $model, $dealerships){
 		$filters = " ";
 		$filter_audience = " ";
 		$filter_focus = " ";
@@ -86,7 +86,7 @@ class activities_model extends CI_Model {
 			$filter_focus 
 			$filter_model 
 			WHERE a.status_id = 1 
-				AND (a.dealership_id = ".$dealership_id . " OR 0=".$dealership_id.")". $filters);
+				AND (a.dealership_id IN ( ".$dealerships . " ) )". $filters);
 
 		/*echo "
 			SELECT a.id, a.start_date, a.name as title, a.happened, c.color
@@ -177,7 +177,7 @@ class activities_model extends CI_Model {
 		$data = array(
 			'name' => $name,
 			'category_id' => $category_id,
-			'start_date' => $start_date,
+			'start_date' => date('Y-m-d', strtotime($start_date)),
 			'expense' => $expense,
 			'description' => $description,
 			'dealership_id' => $dealership_id,

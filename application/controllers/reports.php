@@ -20,7 +20,7 @@ class reports extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('activities_model');
 		$this->load->model('categories_model');
 		$this->load->model('audiences_model');
@@ -72,6 +72,7 @@ class reports extends CI_Controller {
 
 	public function export(){
 		$user = $this->session->userdata("user_data");
+		$security_data = $this->session->userdata('security_data');
 
 		$happened = "";
 		$audience = "";
@@ -81,8 +82,9 @@ class reports extends CI_Controller {
 		$start_date = $_POST["start_date"];
 		$end_date = $_POST["end_date"];
 		$category_id = $_POST["category_id"];
-		$dealers = $user['dealers'];
+		$dealers = $security_data['dealers'];
 		$dealerships = "";
+		$model_all = $this->models_model->get_model_all();
 
 		foreach ($dealers as $key => $dealer) {
 			$dealerships .= $dealer['id'].',';
@@ -112,6 +114,7 @@ class reports extends CI_Controller {
 			foreach ($_POST["model"] as $item) {
 				$model.=$item.",";
 			}
+			$model.=$model_all['id'].",";
 		}
 
 		$currencies = $this->reports_model->get_report_currencies($start_date, $end_date, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealerships);
@@ -151,7 +154,7 @@ class reports extends CI_Controller {
 											  ->setCellValue('B' . 2, "Month")
 				                              ->setCellValue('C' . 2, "Activity Type")
 				                              ->setCellValue('D' . 2, "Activity Name")
-				                              ->setCellValue('E' . 2, "Happened")
+				                              ->setCellValue('E' . 2, "Completed")
 				                              ->setCellValue('F' . 2, "Start Date")
 				                              ->setCellValue('G' . 2, "Expense")
 				                              ->setCellValue('H' . 2, "Audience")

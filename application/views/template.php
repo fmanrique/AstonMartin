@@ -1,6 +1,7 @@
 <?php 
 
 $user = $this->session->userdata("user_data");
+$security = $this->session->userdata("security_data");
 
 ?>
  <!DOCTYPE html>
@@ -157,6 +158,23 @@ $user = $this->session->userdata("user_data");
 			
 			<!-- Top Right Menu -->
 			<ul class="nav navbar-nav navbar-right">
+				<?php if ($user['user_type_id'] == 1) : ?>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Regions: <?php echo $user['region_name']; ?>
+						<i class="icon-caret-down small"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<?php foreach($security['regions'] as $key => $region): ?>
+							<?php if ($user['region_id'] == $region['id']) : ?>
+								<li><a href="<?php echo base_url() . 'users/changeregion/' . $region['id'] . '/' . $this->uri->segment(1) . '/' . rand(); ?>"><i class="icon-ok"></i> <?php echo $region['description']; ?></a></li>
+							<?php else: ?>
+								<li><a href="<?php echo base_url() . 'users/changeregion/' . $region['id'] . '/' . $this->uri->segment(1) . '/' . rand(); ?>"><span style="margin-left: 21px"><?php echo $region['description']; ?></span></a></li>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</ul>
+				</li>
+				<?php endif; ?>
 				
 				<?php if ($user['user_type_id'] == 1 || $user['user_type_id'] == 2) : ?>
 				<li class="dropdown">
@@ -165,7 +183,7 @@ $user = $this->session->userdata("user_data");
 						<i class="icon-caret-down small"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<?php foreach($user['dealers'] as $key => $dealer): ?>
+						<?php foreach($security['dealers'] as $key => $dealer): ?>
 							<?php if ($user['dealership_id'] == $dealer['id']) : ?>
 								<li><a href="<?php echo base_url() . 'users/changedealer/' . $dealer['id'] . '/' . $this->uri->segment(1) . '/' . rand(); ?>"><i class="icon-ok"></i> <?php echo $dealer['name']; ?></a></li>
 							<?php else: ?>
@@ -177,11 +195,11 @@ $user = $this->session->userdata("user_data");
 				<?php endif; ?>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Select Year: <?php echo $user['period'] ?>
+						Year: <?php echo $user['period'] ?>
 						<i class="icon-caret-down small"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<?php foreach($user['periods'] as $key => $period): ?>
+						<?php foreach($security['periods'] as $key => $period): ?>
 							<?php if ($user['period'] == $period) : ?>
 								<li><a href="<?php echo base_url() . 'users/changeperiod/' . $period . '/' . $this->uri->segment(1) . '/' . rand(); ?>"><i class="icon-ok"></i> <?php echo $period; ?></a></li>
 							<?php else: ?>

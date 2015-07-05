@@ -20,7 +20,7 @@ class audiences extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('audiences_model');
 	}
 
@@ -65,7 +65,7 @@ class audiences extends CI_Controller {
 		
 		$this->audiences_model->insert($this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'audiences', 'location', 301);
+		redirect(base_url() . 'audiences');
 	}
 
 	public function update($id) {	
@@ -74,7 +74,7 @@ class audiences extends CI_Controller {
 		
 		$this->audiences_model->update($id, $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'audiences', 'location', 301);
+		redirect(base_url() . 'audiences');
 	}
 	
 
@@ -83,7 +83,7 @@ class audiences extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->audiences_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'audiences', 'location', 301);
+		redirect(base_url() . 'audiences');
 	}
 
 	

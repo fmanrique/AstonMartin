@@ -42,25 +42,38 @@ class access extends CI_Controller {
 				if($access) {
 					$periods = $this->activities_model->get_periods();
 					$dealers = array();
+					$regions = array();
 
 					switch ($access[0]->user_type_id) {
 						case 1:
-							$dealers = $this->dealerships_model->get_all();
+							$dealers = $this->dealerships_model->get_all_simple();
 							$dealer_all['id'] = 0;
-							$dealer_all['name'] = 'All Dealerships';
-							$dealer_all['description'] = 'All Dealerships';
+							$dealer_all['name'] = 'All';
+							$dealer_all['description'] = 'All';
 							$dealers[] = $dealer_all;
+
+							$dealer_default = $dealer_all;
+
+							$regions = $this->regions_model->get_all_simple();
+
+							$region_all['id'] = 0;
+							$region_all['description'] = 'All';
+							$regions[] = $region_all;
 							break;
 						case 2:
 							$dealers = $this->dealerships_model->get_by_region($access[0]->region_id);
 							$dealer_all['id'] = 0;
-							$dealer_all['name'] = 'All Dealerships';
-							$dealer_all['description'] = 'All Dealerships';
+							$dealer_all['name'] = 'All';
+							$dealer_all['description'] = 'All';
 							$dealers[] = $dealer_all;
+
+							$dealer_default = $dealer_all;
 							# code...
 							break;
 						default:
 							$dealers = $this->dealerships_model->get_by_user($access[0]->id);
+
+							$dealer_default = $dealers[0];
 							# code...
 							break;
 					}
@@ -78,22 +91,31 @@ class access extends CI_Controller {
 							$years[] = $i;
 						}
 					} 
-
-					
 					
 					$user_data = array(
 						'id' 					=> $access[0]->id,
 						'name'					=> $access[0]->name,
 						'email'					=> $access[0]->email,
 						'user_type_id'			=> $access[0]->user_type_id,
-						'dealership_id'			=> $dealers[0]['id'],
-						'dealership_name'		=> $dealers[0]['name'],
-						'dealers'				=> $dealers,
+						'region_id'				=> 0,
+						'region_name'			=> 'All',
+						'dealership_id'			=> $dealer_default['id'],
+						'dealership_name'		=> $dealer_default['name'], 
+						//'dealers'				=> $dealers,
+						//'regions'				=> $regions,
 						'period'				=> date("Y"),
+						//'periods'				=> $years
+					);
+
+					$security_data = array(
+						'dealers'				=> $dealers,
+						'regions'				=> $regions,
 						'periods'				=> $years
 					);
+
 					$this->session->set_userdata('user_data', $user_data);
-					redirect(base_url() . 'dashboard', 'location', 301);
+					$this->session->set_userdata('security_data', $security_data);
+					redirect(base_url() . 'dashboard');
 				}
 				else{
 					$data['error']="User or Password incorrect, please try again";
@@ -136,9 +158,9 @@ class access extends CI_Controller {
 			// Enviarlo
 			mail($user[0]['email'], 'New password for pp-sms.com', $message, $heders);
 
-			redirect(base_url() . 'access/resetpassword', 'location', 301);
+			redirect(base_url() . 'access/resetpassword');
 		} else {
-			redirect(base_url() . 'access/failresetpassword', 'location', 301);
+			redirect(base_url() . 'access/failresetpassword');
 		}
 	} 
 
@@ -166,7 +188,7 @@ class access extends CI_Controller {
 	public function logout() {
 		$this->session->unset_userdata('user_data');
 		$this->session->sess_destroy();
-		redirect(base_url() . 'login/', 'location', 301);
+		redirect(base_url() . 'login/');
 	}
 	
 }

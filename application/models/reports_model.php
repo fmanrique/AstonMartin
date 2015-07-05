@@ -37,18 +37,20 @@ class reports_model extends CI_Model {
 		}
 
 		if($model!=""){
-			$filter_model = " INNER JOIN activity_models Z ON a.id = Z.activity_id AND Z.model_id in ($model) OR Z.model_id = 7 ";
+			$filter_model = " INNER JOIN activity_models Z ON a.id = Z.activity_id AND Z.model_id in ($model)  ";
+			//OR Z.model_id = 7
 		}
 
 		$result = $this->db->query("
 
-				SELECT d.name as dealership, MONTHNAME(a.start_date) AS month_date, a.name, ca.description, DATE_FORMAT(a.start_date,'%d/%m/%Y') as start_date, a.happened, a_c.audiences, a_f.focus, a.expense, a_m.models, metric, quantity
+				SELECT d.name as dealership, r.description as region, MONTHNAME(a.start_date) AS month_date, a.name, ca.description, DATE_FORMAT(a.start_date,'%d/%m/%Y') as start_date, a.happened, a_c.audiences, a_f.focus, a.expense, a_m.models, metric, quantity
 				FROM activities a 
 
 					$filter_audience 
 					$filter_focus 
 					$filter_model 
 					LEFT JOIN dealerships d ON a.dealership_id = d.id
+					LEFT JOIN regions r ON d.region_id = r.id
 					LEFT JOIN currencies c ON c.id = d.currency_id
 					LEFT JOIN (SELECT ac.activity_id, GROUP_CONCAT(au.description SEPARATOR '|') as audiences 
 								FROM activity_audiences ac 

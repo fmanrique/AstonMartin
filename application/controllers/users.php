@@ -21,10 +21,10 @@ class Users extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url()  . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url()  . 'login/'); 
 
 		$user = $this->session->userdata("user_data");
-		if ($user['user_type_id'] != 1 && $user['user_type_id'] != 2 )  redirect(base_url()  . 'login/', 'location', 301); 
+		if ($user['user_type_id'] != 1 && $user['user_type_id'] != 2 )  redirect(base_url()  . 'login/'); 
 		
 		$this->load->model('users_model');
 		$this->load->model('dealerships_model');
@@ -116,6 +116,48 @@ class Users extends CI_Controller {
 
 		redirect(base_url() . $controller, 'location');	
 	}
+
+	public function changeregion($region_id, $controller) {
+		$user_data = $this->session->userdata('user_data');
+		$security_data = $this->session->userdata('security_data');
+
+		if ($region_id == 0) {
+			$user_data['region_id'] = $region_id;
+			$user_data['region_name'] = 'All';
+
+			$dealers = $this->dealerships_model->get_all_simple();
+			$dealer_all['id'] = 0;
+			$dealer_all['name'] = 'All';
+			$dealer_all['description'] = 'All';
+			$dealers[] = $dealer_all;
+			$security_data['dealers'] = $dealers;
+
+			$user_data['dealership_id'] = 0;
+			$user_data['dealership_name'] = 'All';
+
+		} else {
+			$region = $this->regions_model->get_by_id($region_id);
+
+			$dealers = $this->dealerships_model->get_by_region($region_id);
+			$dealer_all['id'] = 0;
+			$dealer_all['name'] = 'All';
+			$dealer_all['description'] = 'All';
+			$dealers[] = $dealer_all;
+			$security_data['dealers'] = $dealers;
+
+			$user_data['region_id'] = $region_id;
+			$user_data['region_name'] = $region[0]['description'];
+
+			$user_data['dealership_id'] = 0;
+			$user_data['dealership_name'] = 'All';
+		}
+
+		$this->session->set_userdata('user_data', $user_data);
+		$this->session->set_userdata('security_data', $security_data);
+
+		redirect(base_url() . $controller, 'location');	
+	}
+
 
 	public function save() {
 		$date = date("Y-m-d H:i:s");

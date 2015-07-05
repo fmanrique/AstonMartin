@@ -23,6 +23,7 @@ class users_model extends CI_Model {
 				LEFT JOIN (SELECT de.region_id, GROUP_CONCAT(de.name SEPARATOR ', ') as 'dealerships_regions'
 									FROM dealerships de
 									INNER JOIN regions re ON re.id = de.region_id
+									WHERE de.status_id = 1 AND re.status_id = 1
 									GROUP BY region_id) de_re ON u.region_id = de_re.region_id
 				WHERE u.status_id = 1 AND u.user_type_id = 2
 				) O

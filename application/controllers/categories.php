@@ -20,7 +20,7 @@ class categories extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('categories_model');
 		$this->load->library('functions');
 	}
@@ -86,7 +86,7 @@ class categories extends CI_Controller {
 		
 		$this->categories_model->insert($this->input->post('parent_id'), $this->input->post('description'), $this->input->post('color'), $user['id'], $date);
 
-		redirect(base_url() . 'categories', 'location', 301);
+		redirect(base_url() . 'categories');
 	}
 
 	public function update($id) {	
@@ -95,7 +95,7 @@ class categories extends CI_Controller {
 		
 		$this->categories_model->update($id, $this->input->post('parent_id'), $this->input->post('description'), $this->input->post('color'), $user['id'], $date);
 
-		redirect(base_url() . 'categories', 'location', 301);
+		redirect(base_url() . 'categories');
 	}
 	
 
@@ -104,7 +104,7 @@ class categories extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->categories_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'categories', 'location', 301);
+		redirect(base_url() . 'categories');
 	}
 
 	

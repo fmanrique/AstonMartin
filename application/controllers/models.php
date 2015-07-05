@@ -20,7 +20,7 @@ class models extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('models_model');
 	}
 
@@ -67,7 +67,7 @@ class models extends CI_Controller {
 		
 		$this->models_model->insert($this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'models', 'location', 301);
+		redirect(base_url() . 'models');
 	}
 
 	public function update($id) {	
@@ -76,7 +76,7 @@ class models extends CI_Controller {
 		
 		$this->models_model->update($id, $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'models', 'location', 301);
+		redirect(base_url() . 'models');
 	}
 	
 
@@ -85,7 +85,7 @@ class models extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->models_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'models', 'location', 301);
+		redirect(base_url() . 'models');
 	}
 
 	

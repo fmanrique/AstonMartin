@@ -20,7 +20,7 @@ class currencies extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('currencies_model');
 	}
 
@@ -67,7 +67,7 @@ class currencies extends CI_Controller {
 		
 		$this->currencies_model->insert($this->input->post('name'), $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'currencies', 'location', 301);
+		redirect(base_url() . 'currencies');
 	}
 
 	public function update($id) {	
@@ -76,7 +76,7 @@ class currencies extends CI_Controller {
 		
 		$this->currencies_model->update($id, $this->input->post('name'), $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'currencies', 'location', 301);
+		redirect(base_url() . 'currencies');
 	}
 	
 
@@ -85,7 +85,7 @@ class currencies extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->currencies_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'currencies', 'location', 301);
+		redirect(base_url() . 'currencies');
 	}
 
 	

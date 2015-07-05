@@ -66,11 +66,11 @@ class functions {
 		return date("F", strtotime(date("d-$month-y")));
 	}
 
-	function datediff($interval, $datefrom, $dateto) {
+	public function datediff($interval, $datefrom, $dateto) {
 		$quantity = 0;
-		while ($datefrom <= $dateto) {
+		while (strtotime($datefrom) <= strtotime($dateto)) {
 			$quantity += 1;
-			$datefrom = date('Y-m-d', strtotime($interval, strtotime($datefrom)));
+			$datefrom = date('m/d/Y', strtotime($interval, strtotime($datefrom)));
 		}
 
 		return $quantity;

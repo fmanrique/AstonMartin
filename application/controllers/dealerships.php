@@ -20,7 +20,7 @@ class  dealerships extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('dealerships_model');
 		$this->load->model('regions_model');
 		$this->load->model('currencies_model');
@@ -70,7 +70,7 @@ class  dealerships extends CI_Controller {
 		
 		$this->dealerships_model->insert($this->input->post('name'),$this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
 
-		redirect(base_url() . 'dealerships', 'location', 301);
+		redirect(base_url() . 'dealerships');
 	}
 
 	public function update($id) {	
@@ -79,7 +79,7 @@ class  dealerships extends CI_Controller {
 		
 		$this->dealerships_model->update($id, $this->input->post('name'), $this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
 
-		redirect(base_url() . 'dealerships', 'location', 301);
+		redirect(base_url() . 'dealerships');
 	}
 	
 
@@ -88,7 +88,7 @@ class  dealerships extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->dealerships_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'dealerships', 'location', 301);
+		redirect(base_url() . 'dealerships');
 	}
 
 	

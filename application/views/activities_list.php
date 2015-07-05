@@ -13,10 +13,10 @@
 							<div class="row">
 								<div class="col-md-12">
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" name="happened[]" value="1"> Happened
+										<input type="checkbox" class="uniform" name="happened[]" value="1"> Completed
 									</label>
 									<label class="checkbox-inline">
-										<input type="checkbox" class="uniform" name="happened[]" value="0"> Not happened
+										<input type="checkbox" class="uniform" name="happened[]" value="0"> Did Not Occur
 									</label>
 								</div>
 							</div>

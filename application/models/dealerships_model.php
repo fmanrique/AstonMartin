@@ -7,12 +7,24 @@ class dealerships_model extends CI_Model {
    
 	public function get_all(){
 		//Get only actives
-		$query = $this->db->get_where('dealerships', array('status_id' => 1));
+		//$query = $this->db->get_where('dealerships', array('status_id' => 1));
 
 		$this->db->select('d.*,z.description as "region_description", c.name as "currency_name"');
 		$this->db->from('dealerships d');
 		$this->db->join('regions z', 'z.id = d.region_id', 'inner');
 		$this->db->join('currencies c', 'c.id = d.currency_id', 'left');
+		$this->db->where('d.status_id', 1);
+		$this->db->order_by('d.name');
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function get_all_simple(){
+		//Get only actives
+		$this->db->select('d.id, d.name, d.description');
+		$this->db->from('dealerships d');
 		$this->db->where('d.status_id', 1);
 		$this->db->order_by('d.name');
 
@@ -43,18 +55,25 @@ class dealerships_model extends CI_Model {
 
 	public function get_by_region($region_id){
 		//Get only actives
-		$query = $this->db->get_where('dealerships', array('region_id' => $region_id, 'status_id' => 1));
+		$this->db->select('d.id, d.name, d.description');
+		$this->db->from('dealerships d');
+		$this->db->where('d.status_id', 1);
+		$this->db->where('d.region_id', $region_id);
+		$this->db->order_by('d.name');
+		
+		$query = $this->db->get();
+
 		return $query->result_array();
 		
 	}
 
 	public function get_by_user($user_id) {
 		$query = $this->db->query("
-			SELECT u.dealership_id, d.name as dealership_name, r.description as region_name
+			SELECT u.dealership_id as id, d.name, r.description as region_name
 			FROM dealerships d 
 			INNER JOIN users u ON d.id = u.dealership_id 
 			INNER JOIN regions r ON r.id = d.region_id 
-			WHERE u.id=$id AND u.status_id = 1
+			WHERE u.id=$user_id AND u.status_id = 1
 			LIMIT 1
 		");
 

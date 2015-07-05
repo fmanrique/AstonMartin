@@ -20,7 +20,7 @@ class metrics extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('metrics_model');
 	}
 
@@ -65,7 +65,7 @@ class metrics extends CI_Controller {
 		
 		$this->metrics_model->insert($this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'metrics', 'location', 301);
+		redirect(base_url() . 'metrics');
 	}
 
 	public function update($id) {	
@@ -74,7 +74,7 @@ class metrics extends CI_Controller {
 		
 		$this->metrics_model->update($id, $this->input->post('description'), $user['id'], $date);
 
-		redirect(base_url() . 'metrics', 'location', 301);
+		redirect(base_url() . 'metrics');
 	}
 	
 
@@ -83,7 +83,7 @@ class metrics extends CI_Controller {
 		$user = $this->session->userdata("user_data");
 
 		$this->metrics_model->delete($id, $user['id'], $date);
-		redirect(base_url() . 'metrics', 'location', 301);
+		redirect(base_url() . 'metrics');
 	}
 
 	

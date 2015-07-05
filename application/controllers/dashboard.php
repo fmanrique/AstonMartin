@@ -20,7 +20,7 @@ class dashboard extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('dealerships_model');
 		$this->load->model('sales_model');
 		$this->load->model('activities_model');
@@ -28,14 +28,15 @@ class dashboard extends CI_Controller {
 	}
 
 	public function index() {
+		
 		$user = $this->session->userdata("user_data");
+		$security_data = $this->session->userdata('security_data');
 
 		$vars['title'] = 'Dashboard';
 		$vars['content_view'] = '/targeted_sales';
 		$vars['option']  = "dashboard";
 		$vars['user_type_id'] = $user['user_type_id'];
 
-		
 		$sales = array();
 		$q = 1;
 		$data = array();
@@ -48,7 +49,7 @@ class dashboard extends CI_Controller {
 	
 		if ($user['dealership_id'] == 0) {
 			$sales = $this->sales_model->get_by_period($user['period']);
-			$dealerships = $user['dealers'];
+			$dealerships = $security_data['dealers'];
 			$sumamry['spend'] = $this->activities_model->get_sales_by_date($user["period"]);
 			$vars['dealership_revenue'] = 1;
 		} else {

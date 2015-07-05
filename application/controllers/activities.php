@@ -20,11 +20,12 @@ class activities extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/', 'location', 301); 
+		if (!$this->session->userdata('user_data'))  redirect(base_url() . 'login/'); 
 		$this->load->model('activities_model');
 		$this->load->model('categories_model');
 		$this->load->model('audiences_model');
 		$this->load->model('models_model');
+		$this->load->model('dealerships_model');
 		$this->load->model('focus_model');
 		$this->load->model('frequency_model');
 		$this->load->model('metrics_model');
@@ -72,15 +73,27 @@ class activities extends CI_Controller {
 	{
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
+		$security_data = $this->session->userdata('security_data');
 
 		// FILTERS =============
 		$happened = "";
 		$audience = "";
 		$focus = "";
 		$model = "";
+		$dealerships = "";
 
 		$category_id = $this->input->post("category");
 		$dealership_id = $user['dealership_id'];
+		$dealers = $security_data['dealers'];
+
+
+		if ($dealership_id == 0) {
+			foreach ($dealers as $key => $dealer) {
+				$dealerships .= $dealer['id'].',';
+			}
+		} else {
+			$dealerships .= $dealership_id.',';
+		}
 
 		if ($_POST["from"] != "") {
 			$start = $this->input->post("from");
@@ -125,7 +138,7 @@ class activities extends CI_Controller {
 		}
 		// FILTERS =============
 
-		$activities = $this->activities_model->get_by_filters($start, $end, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','),$dealership_id);	
+		$activities = $this->activities_model->get_by_filters($start, $end, $category_id, rtrim($happened,','), rtrim($audience,','), rtrim($focus,','), rtrim($model,','), rtrim($dealerships, ','));	
 
 
 		$calendar = "[";
@@ -134,7 +147,7 @@ class activities extends CI_Controller {
 			$calendar .= "{";
 
 			//$start_date = new DateTime($activity['start_date']);
-			$start_date = new DateTime(date('m/d/Y', strtotime("+1 day", strtotime($activity['start_date']))));	
+			$start_date = new DateTime(date('m/d/Y', strtotime($activity['start_date'])));	
 
 			//$end = date('m/d/Y', strtotime("+1 day", strtotime($end)));		
 
@@ -163,6 +176,8 @@ class activities extends CI_Controller {
 	}
 
 	public function add() {
+		$user = $this->session->userdata("user_data");
+
 		$vars['title'] = 'Add new activity';
 		$vars['content_view'] = '/activities_new';
 		$vars['option']  = "activities";
@@ -172,6 +187,20 @@ class activities extends CI_Controller {
 		$vars['frequencies'] = $this->frequency_model->get_all();
 		$vars['metrics'] = $this->metrics_model->get_all();
 		$vars['end_date'] = date('m/d/Y', strtotime('12/31'));
+
+		if ($user['dealership_id'] == 0) {
+			switch ($user['user_type_id']) {
+				case 1:
+					$vars['dealerships'] = $this->dealerships_model->get_all();
+					break;
+				case 2:
+					$vars['dealerships'] = $this->dealerships_model->get_by_region($user['region_id']);
+					break;
+				default:
+					$vars['dealerships'] = $this->dealerships_model->get_by_user($user['id']);
+					break;
+			}
+		}
 
 		$parents = $this->categories_model->get_parents();
 		$childs = $this->categories_model->get_childs();
@@ -277,6 +306,7 @@ class activities extends CI_Controller {
 	}
 
 	public function save() {
+		$user = $this->session->userdata("user_data");
 		$s_date = DateTime::createFromFormat('m/d/Y', $this->input->post('start_date'));
 		$start_date = $s_date->format( 'm/d/Y' );
 		$total_expense = $this->input->post('expense');
@@ -287,6 +317,11 @@ class activities extends CI_Controller {
 			$end_date = $e_date->format( 'm/d/Y' );
 		}
 
+		$dealership_id = $user['dealership_id'];
+		if ($dealership_id == 0) {
+			$dealership_id = $this->input->post('dealership_id');
+		}
+
 		if ($this->input->post('repeated') == "1") {
 			$current_date = $start_date;
 			switch ($this->input->post('frequency_id')) {
@@ -294,39 +329,39 @@ class activities extends CI_Controller {
 					$weeks = $this->functions->datediff("+1 week", $start_date, $end_date);
 					$expense = $total_expense/$weeks;
 					for ($i = 0; $i<$weeks; $i++) {
-						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
-						$current_date = date('Y-m-d', strtotime("+1 week", strtotime($current_date)));
+						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $dealership_id, $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
+						$current_date = date('m/d/Y', strtotime("+1 week", strtotime($current_date)));
 					}
 					break;
 				case '2': //By Month
 					$months = $this->functions->datediff("+1 months", $start_date, $end_date);
 					$expense = $total_expense/$months;
 					for ($i = 0; $i<$months; $i++) {
-						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
-						$current_date = date('Y-m-d', strtotime("+1 months", strtotime($current_date)));
+						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $dealership_id, $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
+						$current_date = date('m/d/Y', strtotime("+1 months", strtotime($current_date)));
 					}
 					break;
 				case '1': //By Quarter
 					$quarters = $this->functions->datediff("+4 months", $start_date, $end_date);
 					$expense = $total_expense/$quarters;
 					for ($i = 0; $i<$quarters; $i++) {
-						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
-						$current_date = date('Y-m-d', strtotime("+4 months", strtotime($current_date)));
+						$this->insert($this->input->post('name'), $this->input->post('category_id'), $current_date, $expense, $this->input->post('description'), $dealership_id, $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
+						$current_date = date('m/d/Y', strtotime("+4 months", strtotime($current_date)));
 					}
 					break;
 			}
 		} else {
-			$this->insert($this->input->post('name'), $this->input->post('category_id'), $start_date, $this->input->post('expense'), $this->input->post('description'), $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
+			$this->insert($this->input->post('name'), $this->input->post('category_id'), $start_date, $this->input->post('expense'), $this->input->post('description'), $dealership_id, $this->input->post('audience'), $this->input->post('model'), $this->input->post('focus'), $this->input->post('metrics'));
 		}
 
-		redirect(base_url() . 'activities', 'location', 301);
+		redirect(base_url() . 'activities');
 	}
 
-	private function insert($name, $category_id, $start_date, $expense, $description, $audiences, $models, $focus, $metrics){
+	private function insert($name, $category_id, $start_date, $expense, $description, $dealership_id, $audiences, $models, $focus, $metrics){
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
 		
-		$activity_id = $this->activities_model->insert($name, $category_id, $start_date, $expense, $description, $user['dealership_id'], $user['id'], $date);
+		$activity_id = $this->activities_model->insert($name, $category_id, $start_date, $expense, $description, $dealership_id, $user['id'], $date);
 
 		if ($audiences != "") {
 			foreach($audiences as $key => $audience_id) {
@@ -391,7 +426,7 @@ class activities extends CI_Controller {
 			$this->activity_metrics_model->insert($id, $metric[1], $metric[2]);
 		}
 
-		redirect(base_url() . 'activities', 'location', 301);
+		redirect(base_url() . 'activities');
 	}
 	
 

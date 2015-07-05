@@ -21,10 +21,10 @@
 							<div class="row">
 								<div class="col-md-12">
 									<label class="checkbox-inline" style="position: relative; top: -6px">
-										<input type="radio" class="uniform" name="happened" <?php echo ($data['happened'] == 1 ? "checked" : "") ?> value="1"> <span style="position: relative; top: 4px">Happened</span>
+										<input type="radio" class="uniform" name="happened" <?php echo ($data['happened'] == 1 ? "checked" : "") ?> value="1"> <span style="position: relative; top: 4px">Completed</span>
 									</label>
 									<label class="checkbox-inline" style="position: relative; top: -6px">
-										<input type="radio" class="uniform" name="happened" <?php echo ($data['happened'] == 0 ? "checked" : "") ?> value="0"> <span style="position: relative; top: 4px">Not happened</span>
+										<input type="radio" class="uniform" name="happened" <?php echo ($data['happened'] == 0 ? "checked" : "") ?> value="0"> <span style="position: relative; top: 4px">Did Not Occur</span>
 									</label>
 								</div>
 							</div>
