@@ -59,6 +59,8 @@ class access extends CI_Controller {
 							$region_all['id'] = 0;
 							$region_all['description'] = 'All';
 							$regions[] = $region_all;
+
+							$region_default = $region_all;
 							break;
 						case 2:
 							$dealers = $this->dealerships_model->get_by_region($access[0]->region_id);
@@ -68,12 +70,17 @@ class access extends CI_Controller {
 							$dealers[] = $dealer_all;
 
 							$dealer_default = $dealer_all;
-							# code...
+
+							$regions = $this->regions_model->get_by_id($access[0]->region_id);
+							$region_default = $regions[0];
 							break;
 						default:
 							$dealers = $this->dealerships_model->get_by_user($access[0]->id);
 
 							$dealer_default = $dealers[0];
+
+							$region_default['id'] = 0;
+							$region_default['description'] = 'All';
 							# code...
 							break;
 					}
@@ -97,8 +104,8 @@ class access extends CI_Controller {
 						'name'					=> $access[0]->name,
 						'email'					=> $access[0]->email,
 						'user_type_id'			=> $access[0]->user_type_id,
-						'region_id'				=> 0,
-						'region_name'			=> 'All',
+						'region_id'				=> $region_default['id'],
+						'region_name'			=> $region_default['description'],
 						'dealership_id'			=> $dealer_default['id'],
 						'dealership_name'		=> $dealer_default['name'], 
 						//'dealers'				=> $dealers,

@@ -27,32 +27,44 @@ class  dealerships extends CI_Controller {
 	}
 
 	public function index() {
+		$user = $this->session->userdata("user_data");
 		$vars['title'] = 'Dealerships';
 		$vars['content_view'] = '/dealerships_list';
 		$vars['option']  = "dealerships";
-		$vars['data'] = $this->dealerships_model->get_all();
+
+		if ($user['user_type_id'] == 2) {
+			$vars['data'] = $this->dealerships_model->get_all_by_region($user['region_id']);
+		} else {
+			$vars['data'] = $this->dealerships_model->get_all();
+		}		
 		
 		$this->load->view('template', $vars);
 		
 	}
 
 	public function add() {
+		$user = $this->session->userdata("user_data");
+
 		$vars['title'] = 'dealerships';
 		$vars['content_view'] = '/dealerships_new';
 		$vars['option']  = "dealerships";
 		$vars['regions'] = $this->regions_model->get_all();
 		$vars['currencies'] = $this->currencies_model->get_all();
+		$vars['user_type_id'] = $user['user_type_id'];
+
 
 		$this->load->view('template', $vars);
 	}
 
 	public function edit($id) {
+		$user = $this->session->userdata("user_data");
 		$vars['title'] = 'dealerships';
 		$vars['content_view'] = '/dealerships_edit';
 		$vars['option']  = "dealerships";
 		$vars['data'] = $this->dealerships_model->get_by_id($id);
 		$vars['regions'] = $this->regions_model->get_all();
 		$vars['currencies'] = $this->currencies_model->get_all();
+		$vars['user_type_id'] = $user['user_type_id'];
 			
 		if (count($vars['data']) > 0) {
 			$vars['data'] = $vars['data'][0];
@@ -67,8 +79,14 @@ class  dealerships extends CI_Controller {
 	public function save() {
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
+
+		if ($user['user_type_id'] == 2) {
+			$region_id = $user['region_id']; 
+		} else {
+			$region_id = $this->input->post('region_id');
+		}
 		
-		$this->dealerships_model->insert($this->input->post('name'),$this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
+		$this->dealerships_model->insert($this->input->post('name'),$this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$region_id, $user['id'], $date);
 
 		redirect(base_url() . 'dealerships');
 	}
@@ -76,8 +94,14 @@ class  dealerships extends CI_Controller {
 	public function update($id) {	
 		$date = date("Y-m-d H:i:s");
 		$user = $this->session->userdata("user_data");
+
+		if ($user['user_type_id'] == 2) {
+			$region_id = $user['region_id']; 
+		} else {
+			$region_id = $this->input->post('region_id');
+		}
 		
-		$this->dealerships_model->update($id, $this->input->post('name'), $this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$this->input->post('region_id'), $user['id'], $date);
+		$this->dealerships_model->update($id, $this->input->post('name'), $this->input->post('description'),$this->input->post('revenue'),$this->input->post('currency_id'),$region_id, $user['id'], $date);
 
 		redirect(base_url() . 'dealerships');
 	}

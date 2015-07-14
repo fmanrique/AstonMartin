@@ -296,6 +296,7 @@ class activities extends CI_Controller {
 			$item[0] = $key;
 			$item[1] = $metric['metric_id'];
 			$item[2] = $metric['quantity'];
+			$item[3] = $metric['results'];
 
 			$activity_metrics[] = $item;
 		}
@@ -384,7 +385,7 @@ class activities extends CI_Controller {
 		$metrics = json_decode($this->input->post('metrics'));
 
 		foreach($metrics as $key => $metric) {
-			$this->activity_metrics_model->insert($activity_id, $metric[1], $metric[2]);
+			$this->activity_metrics_model->insert($activity_id, $metric[1], $metric[2], $metric[3]);
 		}
 	}
 
@@ -423,7 +424,7 @@ class activities extends CI_Controller {
 
 		$this->activity_metrics_model->delete_by_activity_id($id);
 		foreach($metrics as $key => $metric) {
-			$this->activity_metrics_model->insert($id, $metric[1], $metric[2]);
+			$this->activity_metrics_model->insert($id, $metric[1], $metric[2], $metric[3]);
 		}
 
 		redirect(base_url() . 'activities');

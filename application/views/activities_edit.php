@@ -126,11 +126,12 @@
 						<input type="hidden" id="metrics" name="metrics">
 						<label class="col-md-2 control-label">Add Metrics:</label>
 						
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<div class="row">
 								<div class="col-md-12">
 									<span class="help-block">Metric</span>
 									<select class="form-control" id="metrics_metric">
+										<option value="0">- Select -</option>
 										<?php foreach($metrics as $key => $metric) {?>
 											<option value="<?php echo $metric['id']; ?>"><?php echo $metric['description']; ?></option>
 										<?php } ?>
@@ -140,11 +141,20 @@
 						</div>
 						
 
-						<div class="col-md-3">
+						<div class="col-md-2">
 							<div class="row">
 								<div class="col-md-12">
-									<span class="help-block">Quantity</span>
+									<span class="help-block">Objected</span>
 									<input type="text" name="quantity" id="metrics_quantity" class="form-control" style="width: 100px">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="row">
+								<div class="col-md-12">
+									<span class="help-block">Results</span>
+									<input type="text" name="results" id="metrics_results" class="form-control" style="width: 100px" maxlength="5">
 								</div>
 							</div>
 						</div>
@@ -166,9 +176,10 @@
 									<table class="table" id="table_activity_metrics">
 										<thead>
 											<tr>
-												<th style="width: 60%">Metric</th>
-												<th style="width: 20%">Quantity</th>
-												<th style="width: 20%; in-width: 60px" class="align-center no-sort">Delete</th>
+												<th style="width: 55%">Metric</th>
+												<th style="width: 15%">Objected</th>
+												<th style="width: 15%">Results</th>
+												<th style="width: 15%; in-width: 60px" class="align-center no-sort">Delete</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -176,6 +187,7 @@
 											<tr>
 												<td><?php echo $metric['metric']; ?></td>
 												<td><?php echo $metric['quantity']; ?></td>
+												<td><?php echo $metric['results']; ?></td>
 												<td class="align-center">
 													<span class="btn-group"><a data-row="<?php echo $key; ?>" title="Delete" class="delete-activity"><i class="icon-remove"></i></a></span>
 												</td>
@@ -253,41 +265,54 @@ $(document).ready(function() {
 	});
 
     var data_input = JSON.parse('<?php echo $activity_metrics_json; ?>');
-    var cols = ["0", "1", "2"];
+    var cols = ["0", "1", "2", "3"];
     var row_id = 0;
 
     var t = $('#table_activity_metrics').DataTable();
     
     $('#addmetric').on( 'click', function () {
+    	if ($('#metrics_metric option:selected').val() == "0") {
+    		alert("Please, select Metric option");
+    		return;
+    	}
     	var quantity = 1;
+    	var results = 1;
     	var data = t.fnGetData();
 
     	if ($('#metrics_quantity').val() != "") quantity = $('#metrics_quantity').val();
+    	if ($('#metrics_results').val() != "") results = $('#metrics_results').val();
 
     	key = search_array(cols[0], $('#metrics_metric option:selected').text(), data);
 
 
     	if (key >= 0) {
     		quantity = parseInt(data[key][cols[1]]) + parseInt(quantity);
+    		results = parseInt(data[key][cols[2]]) + parseInt(results);
     		t.fnUpdate(quantity, key, cols[1]);
+    		t.fnUpdate(results, key, cols[2]);
     		
     		update_row_id = data_input[key][cols[0]];
-    		data_input[key] = [update_row_id, $('#metrics_metric option:selected').val(), quantity];
+    		data_input[key] = [update_row_id, $('#metrics_metric option:selected').val(), quantity, results];
 
     	} else {
     		t.fnAddData( [
 	            $('#metrics_metric option:selected').text(),
 	            quantity,
+	            results,
 	            "<span class=\"btn-group\"><a title=\"Delete\" data-row=\"" + row_id + "\" class=\"delete-activity\"><i class=\"icon-remove\"></i></a></span>"
 	        ]);
 
-    		data_input.push([row_id, $('#metrics_metric option:selected').val(), quantity]);
+    		data_input.push([row_id, $('#metrics_metric option:selected').val(), quantity, results]);
 
     		row_id = row_id+1;
 
     	}
 		$('#table_activity_metrics tr td:nth-child(3)').addClass('align-center');
         
+        $('#metrics_quantity').val("");
+		$('#metrics_results').val("");
+		$('#metrics_metric option:selected').val()
+		$('#metrics_metric option:eq(0)').prop('selected', true);
 
     } );
 

@@ -132,13 +132,13 @@ class reports extends CI_Controller {
 				$objWorkSheet = $objPHPExcel->createSheet($key);
 
 
-				$objWorkSheet->setCellValue('K' . 1, "Metrics");
-				$objWorkSheet->mergeCells("K1:L1");
-				$objWorkSheet->getStyle('K1')->getAlignment()->applyFromArray(
+				$objWorkSheet->setCellValue('L' . 1, "Metrics");
+				$objWorkSheet->mergeCells("L1:M1");
+				$objWorkSheet->getStyle('L1')->getAlignment()->applyFromArray(
 				    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,)
 				);
 
-				$objWorkSheet->getStyle('A1:L2')->applyFromArray(
+				$objWorkSheet->getStyle('A1:M2')->applyFromArray(
 				    array(
 				        'fill' => array(
 				            'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -146,67 +146,70 @@ class reports extends CI_Controller {
 				        )
 				    )
 				);
-				$objWorkSheet->getStyle('A1:L2')->getFont()->setBold(true);
-				$objWorkSheet->getStyle('A1:L2')->getFont()->setSize(14);
+				$objWorkSheet->getStyle('A1:M2')->getFont()->setBold(true);
+				$objWorkSheet->getStyle('A1:M2')->getFont()->setSize(14);
 
 
-				$objWorkSheet->setCellValue('A' . 2, "Dealership")
-											  ->setCellValue('B' . 2, "Month")
-				                              ->setCellValue('C' . 2, "Activity Type")
-				                              ->setCellValue('D' . 2, "Activity Name")
-				                              ->setCellValue('E' . 2, "Completed")
-				                              ->setCellValue('F' . 2, "Start Date")
-				                              ->setCellValue('G' . 2, "Expense")
-				                              ->setCellValue('H' . 2, "Audience")
-				                              ->setCellValue('I' . 2, "Activity Focus")
-				                              ->setCellValue('J' . 2, "Model Focus")
-				                              ->setCellValue('K' . 2, "Metric")
-				                              ->setCellValue('L' . 2, "Quantity");
+				$objWorkSheet->setCellValue('A' . 2, "Region")
+											  ->setCellValue('B' . 2, "Dealership")
+											  ->setCellValue('C' . 2, "Month")
+				                              ->setCellValue('D' . 2, "Activity Type")
+				                              ->setCellValue('E' . 2, "Activity Name")
+				                              ->setCellValue('F' . 2, "Completed")
+				                              ->setCellValue('G' . 2, "Start Date")
+				                              ->setCellValue('H' . 2, "Expense")
+				                              ->setCellValue('I' . 2, "Audience")
+				                              ->setCellValue('J' . 2, "Activity Focus")
+				                              ->setCellValue('K' . 2, "Model Focus")
+				                              ->setCellValue('L' . 2, "Metric")
+				                              ->setCellValue('M' . 2, "Quantity");
 
 				$objWorkSheet->getColumnDimension('A')->setWidth(15);
-				$objWorkSheet->getColumnDimension('B')->setWidth(10);
-				$objWorkSheet->getColumnDimension('C')->setWidth(60);
-				$objWorkSheet->getColumnDimension('D')->setWidth(40);
-				$objWorkSheet->getColumnDimension('E')->setWidth(15);
+				$objWorkSheet->getColumnDimension('B')->setWidth(15);
+				$objWorkSheet->getColumnDimension('C')->setWidth(10);
+				$objWorkSheet->getColumnDimension('D')->setWidth(60);
+				$objWorkSheet->getColumnDimension('E')->setWidth(40);
 				$objWorkSheet->getColumnDimension('F')->setWidth(15);
-				$objWorkSheet->getColumnDimension('G')->setWidth(20);
+				$objWorkSheet->getColumnDimension('G')->setWidth(15);
 				$objWorkSheet->getColumnDimension('H')->setWidth(20);
 				$objWorkSheet->getColumnDimension('I')->setWidth(20);
 				$objWorkSheet->getColumnDimension('J')->setWidth(20);
-				$objWorkSheet->getColumnDimension('K')->setWidth(30);
-				$objWorkSheet->getColumnDimension('L')->setWidth(20);
+				$objWorkSheet->getColumnDimension('K')->setWidth(20);
+				$objWorkSheet->getColumnDimension('L')->setWidth(30);
+				$objWorkSheet->getColumnDimension('M')->setWidth(20);
 				
 				$x = 0;
 
 				for ($i = 3; $i <= count($activities)+2; $i++) {
-					$objWorkSheet->setCellValue('A' . $i, $activities[$i-3]["dealership"])
-												  ->setCellValue('B' . $i, $activities[$i-3]["month_date"])
-												  ->setCellValue('C' . $i, $activities[$i-3]["description"])
-					                              ->setCellValue('D' . $i, $activities[$i-3]["name"])
-					                              ->setCellValue('E' . $i, ($activities[$i-3]["happened"] == 0 ? "No" : "Yes"))
-					                              ->setCellValue('F' . $i, $activities[$i-3]["start_date"])
-					                              ->setCellValue('G' . $i, $activities[$i-3]["expense"])
-					                              ->setCellValue('H' . $i, str_replace('|', "\n", $activities[$i-3]["audiences"]))
-					                              ->setCellValue('I' . $i, str_replace('|', "\n", $activities[$i-3]["focus"]))
-					                              ->setCellValue('J' . $i, str_replace('|', "\n", $activities[$i-3]["models"]))
-					                              ->setCellValue('K' . $i, str_replace('|', "\n", $activities[$i-3]["metric"]))
-					                              ->setCellValue('L' . $i, str_replace('|', "\n", $activities[$i-3]["quantity"]));
+					$objWorkSheet->setCellValue('A' . $i, $activities[$i-3]["region"])
+											      ->setCellValue('B' . $i, $activities[$i-3]["dealership"])
+												  ->setCellValue('C' . $i, $activities[$i-3]["month_date"])
+												  ->setCellValue('D' . $i, $activities[$i-3]["description"])
+					                              ->setCellValue('E' . $i, $activities[$i-3]["name"])
+					                              ->setCellValue('F' . $i, ($activities[$i-3]["happened"] == 0 ? "No" : "Yes"))
+					                              ->setCellValue('G' . $i, $activities[$i-3]["start_date"])
+					                              ->setCellValue('H' . $i, $activities[$i-3]["expense"])
+					                              ->setCellValue('I' . $i, str_replace('|', "\n", $activities[$i-3]["audiences"]))
+					                              ->setCellValue('J' . $i, str_replace('|', "\n", $activities[$i-3]["focus"]))
+					                              ->setCellValue('K' . $i, str_replace('|', "\n", $activities[$i-3]["models"]))
+					                              ->setCellValue('L' . $i, str_replace('|', "\n", $activities[$i-3]["metric"]))
+					                              ->setCellValue('M' . $i, str_replace('|', "\n", $activities[$i-3]["quantity"]));
 
-					$objWorkSheet->getStyle('H' . $i)->getAlignment()->setWrapText(true);
 					$objWorkSheet->getStyle('I' . $i)->getAlignment()->setWrapText(true);
 					$objWorkSheet->getStyle('J' . $i)->getAlignment()->setWrapText(true);
 					$objWorkSheet->getStyle('K' . $i)->getAlignment()->setWrapText(true);
 					$objWorkSheet->getStyle('L' . $i)->getAlignment()->setWrapText(true);
+					$objWorkSheet->getStyle('M' . $i)->getAlignment()->setWrapText(true);
 
-					$objWorkSheet->getStyle('L' . $i)->getAlignment()->applyFromArray(
+					$objWorkSheet->getStyle('M' . $i)->getAlignment()->applyFromArray(
 					    array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,)
 					);
 
-					$objWorkSheet->getStyle('G'.$i)->getNumberFormat()->setFormatCode("$ #,###,###.00");
+					$objWorkSheet->getStyle('H'.$i)->getNumberFormat()->setFormatCode("$ #,###,###.00");
 
 
 					if($x <> 0){
-						$objWorkSheet->getStyle('A'.$i.':L'.$i)->applyFromArray(
+						$objWorkSheet->getStyle('A'.$i.':M'.$i)->applyFromArray(
 						    array(
 						        'fill' => array(
 						            'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -222,10 +225,10 @@ class reports extends CI_Controller {
 
 				}
 
-				$objWorkSheet->setCellValue('G'.($i+2),'=SUM(G3:G'.($i+1).')');
-				$objWorkSheet->setCellValue('F'.($i+2), "TOTAL:");
-				$objWorkSheet->getStyle('F'.($i+2).':F'.($i+2))->getFont()->setBold(true);
-				$objWorkSheet->getStyle('G'.($i+2))->getNumberFormat()->setFormatCode("$ #,###,###.00");
+				$objWorkSheet->setCellValue('H'.($i+2),'=SUM(H3:H'.($i+1).')');
+				$objWorkSheet->setCellValue('G'.($i+2), "TOTAL:");
+				$objWorkSheet->getStyle('G'.($i+2).':G'.($i+2))->getFont()->setBold(true);
+				$objWorkSheet->getStyle('H'.($i+2))->getNumberFormat()->setFormatCode("$ #,###,###.00");
 
 				$objWorkSheet->setTitle($currency['description']);
 

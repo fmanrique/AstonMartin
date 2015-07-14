@@ -38,6 +38,7 @@
 						</div>
 					</div>
 
+					<?php if($user_type_id == 1): ?>
 					<div class="form-group">
 						<label class="col-md-2 control-label">Region</label>
 						<div class="col-md-10">
@@ -48,6 +49,7 @@
 							</select>
 						</div>
 					</div>	
+					<?php endif; ?>
 
 					<div class="form-actions">
 						<input type="button" onclick="javascript:location.href='<?php echo base_url() . "dealerships"; ?>'" value="Cancel" class="btn btn-primary pull-left">

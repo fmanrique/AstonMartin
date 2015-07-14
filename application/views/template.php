@@ -304,6 +304,26 @@ $security = $this->session->userdata("security_data");
 						</a>
 					</li>
 					<?php endif; ?>
+
+					<?php if ($user['user_type_id'] == 2) : ?>
+					<li <?php echo ($option == "catalogs" || $option == "dealerships") ? "class='current'" : ""; ?>>
+						<a href="javascript:void(0);">
+							<i class="icon-edit"></i>
+							Catalogs
+						</a>
+						<ul class="sub-menu">
+							
+							<li <?php echo ($option == "dealerships") ? "class='current'" : ""; ?>>
+								<a href="<?php echo base_url() . "dealerships" ?>">
+								<i class="icon-angle-right"></i>
+								Dealerships
+								</a>
+							</li>
+							
+						</ul>
+					</li>
+					<?php endif; ?>
+
 					<li <?php echo ($option == "activities") ? "class='current'" : ""; ?>>
 						<a href="<?php echo base_url() . "activities" ?>">
 							<i class="icon-calendar "></i>

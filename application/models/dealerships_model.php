@@ -21,6 +21,23 @@ class dealerships_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function get_all_by_region($region_id){
+		//Get only actives
+		//$query = $this->db->get_where('dealerships', array('status_id' => 1));
+
+		$this->db->select('d.*,z.description as "region_description", c.name as "currency_name"');
+		$this->db->from('dealerships d');
+		$this->db->join('regions z', 'z.id = d.region_id', 'inner');
+		$this->db->join('currencies c', 'c.id = d.currency_id', 'left');
+		$this->db->where('d.status_id', 1);
+		$this->db->where('d.region_id', $region_id);
+		$this->db->order_by('d.name');
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
 	public function get_all_simple(){
 		//Get only actives
 		$this->db->select('d.id, d.name, d.description');
